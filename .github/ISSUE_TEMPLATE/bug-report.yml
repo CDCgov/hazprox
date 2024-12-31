@@ -42,8 +42,8 @@ body:
     attributes:
       label: R Version
       description: What version(s) of R are you running?
-      validations:
-        required: true
+    validations:
+      required: true
   - type: textarea
     id: logs
     attributes:
