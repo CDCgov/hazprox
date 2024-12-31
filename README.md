@@ -1,10 +1,10 @@
 # Population-Averaged Hazard Proximity Tool
 
-**General disclaimer** This repository was created for use by CDC programs to collaborate on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/organization/mission.htm).  GitHub is not hosted by the CDC, but is a third party website used by CDC and its partners to share information and collaborate on software. CDC use of GitHub does not imply an endorsement of any one particular service, product, or enterprise. 
-
 ## Overview
 
 This repo houses source code for the development of an R library which will calculate the average population-level proximity to an environmental hazard or hazards. This tool is based on the Superfund Proximity measurement described in the Environmental Protection Agency [EJScreen Tool Technical Documentation](https://www.epa.gov/system/files/documents/2024-07/ejscreen-tech-doc-version-2-3.pdf). 
+
+**General disclaimer** This repository was created for use by CDC programs to collaborate on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/organization/mission.htm).  GitHub is not hosted by the CDC, but is a third party website used by CDC and its partners to share information and collaborate on software. CDC use of GitHub does not imply an endorsement of any one particular service, product, or enterprise. 
   
 ## Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
