@@ -13,7 +13,7 @@ Use this section to describe how to download and install package.
 - Add links for package documentation
 
 ## Report a Bug
-- Want to report a bug or request a feature? Let us know and open an issue
+- Want to report a bug or request a feature? Let us know and open an [issue](https://github.com/cdcent/proximity-tool/issues/new/choose). 
 
 ## Contribute
 Anyone is encouraged to contribute to the repository by [forking](https://help.github.com/articles/fork-a-repo)
