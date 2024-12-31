@@ -37,11 +37,23 @@ body:
       default: 0
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: RVersion
     attributes:
       label: R Version
-      description: What version(s) of R are you running?
+      description: Tell us which version(s) of R are you using. Include all versions you've tested (e.g., 4.4.2;4.3.3).
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes: 
+      label: Operating system
+      description: What operating system are you using?
+      options:
+        - Windows
+        - macOS
+        - Linux
+      default: 0
     validations:
       required: true
   - type: textarea
