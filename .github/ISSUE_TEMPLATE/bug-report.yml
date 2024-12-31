@@ -41,14 +41,14 @@ body:
     id: environment
     attributes:
       label: Environment details
-      description: 
+      description: |
         examples:
           - **OS**: Windows 10
           - **R Version**: 4.4.2
       value: |
         - OS:
         - R Version:
-    render: markdown
+      render: markdown
     validations:
       required: true
   - type: textarea
