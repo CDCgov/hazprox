@@ -65,10 +65,11 @@ This repository is not a source of government records, but is a copy to increase
 collaboration and collaborative potential. All government records will be
 published through the [CDC web site](http://www.cdc.gov).
 
+## Acknowledgements
+
 ## Related documents
 
 * [Open Practices](open_practices.md)
 * [Rules of Behavior](rules_of_behavior.md)
-* [Thanks and Acknowledgements](thanks.md)
 * [Disclaimer](DISCLAIMER.md)
 * [Contribution Notice](CONTRIBUTING.md)
