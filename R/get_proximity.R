@@ -1,32 +1,37 @@
 library(sf)
+library(dplyr)
+library(glue)
 #--------------------------------------------------------------------------------------
 #Function to calculate proximity between polygons and points.
 #--------------------------------------------------------------------------------------
 #' @export
-calc_proximity_scores<-function(from_blocks, to_points, tolerance){
+get_proximity<-function(from_poly, to_points, tolerance){
 
-  #Calculate midpoint coordinates for each block
-  from_blocks<-from_blocks |> st_centroid()
+  #Ensure polygon and points are in same projection
+  dflist <- sync_projection(from_poly, to_points)
 
   #Calculate block area in square kilometers
-  from_blocks <-from_blocks %>%
+  from_poly <-dflist[[1]] %>%
     mutate(st_areashape = (ALAND+AWATER)/1000000)
 
   #Calculate block area equivalent radius
-  from_blocks <-from_blocks %>%
+  from_poly <-from_poly %>%
     mutate(baeqRad = (st_areashape/pi)^(1/2))
+
+  #Calculate midpoint coordinates for each polygon
+  from_poly<-from_poly |> st_centroid()
 
   #Calculate distance (km) between each pair
   distances<-data.frame(
     matrix(
-      st_distance(from_blocks$geometry, to_points$geometry)/1000,
-      nrow=length(from_blocks$geometry), ncol=length(to_points$geometry)
+      st_distance(from_poly$geometry, dflist[[2]]$geometry)/1000,
+      nrow=length(from_poly$geometry), ncol=length(dflist[[2]]$geometry)
     )
   )
 
   #Add block id and block area equivalent radius
-  distances$GEOID<- from_blocks$GEOID
-  distances$baeqRad <- from_blocks$baeqRad
+  distances$GEOID<- from_poly$GEOID
+  distances$baeqRad <- from_poly$baeqRad
 
   #Pivot longer and Calculate corrected distance
   distances <- distances %>%
@@ -40,7 +45,6 @@ calc_proximity_scores<-function(from_blocks, to_points, tolerance){
                                              1/min(Distance),
                                              sum(1/CorrectedDistance[Distance<tolerance])))
 
-  #Merge inverse distances back to block data
-  #dataset<-merge(dataset, distances, by='GEOID', all.x=T)
+
   return(distances)
 }
