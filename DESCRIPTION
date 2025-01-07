@@ -1,11 +1,18 @@
 Package: hazprox
-Title: What the Package Does (One Line, Title Case)
+Title: Population-Weighted Average Proximity to Hazards 
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Sarah", "Rockhill", 
+            email="ppk8@cdc.gov", 
+            role = c("aut", "cre"), 
+            comment = c(ORCID = "0000-0003-3197-2825"))
+Description: Calculate the average proximity to environmental hazards over
+            a specified areal unit, weighted by population. 
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
+Imports: 
+    dplyr (>= 1.1.4),
+    sf (>= 1.0.16)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
