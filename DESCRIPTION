@@ -8,8 +8,7 @@ Authors@R:
             comment = c(ORCID = "0000-0003-3197-2825"))
 Description: Calculate the average proximity to environmental hazards over
             a specified areal unit, weighted by population. 
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: Apache License (>= 2)
 Imports: 
     dplyr (>= 1.1.4),
     tidyr (>= 1.3.1),
