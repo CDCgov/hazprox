@@ -7,7 +7,7 @@
 is_spatial(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{an object}
 }
 \value{
 Returns True if object is spatial and False otherwise.
