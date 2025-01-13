@@ -15,6 +15,8 @@
 #' environmental hazards.
 #' @param tolerance The maximum search distance for environmental hazards.
 #'
+#' @importFrom rlang .data
+#'
 #' @export
 get_proximity<-function(from_poly, to_points, tolerance){
 
@@ -26,12 +28,12 @@ get_proximity<-function(from_poly, to_points, tolerance){
     dplyr::mutate(st_areashape =
                     units::set_units(
                       sf::st_area(from_poly),
-                    km^2)
+                    "km^2")
                   )
 
   #Calculate block area equivalent radius
   from_poly <-from_poly |>
-    dplyr::mutate(baeqRad = (st_areashape/pi)^(1/2))
+    dplyr::mutate(baeqRad = (.data$st_areashape/pi)^(1/2))
 
   #Calculate midpoint coordinates for each polygon
   suppressWarnings(
@@ -43,7 +45,7 @@ get_proximity<-function(from_poly, to_points, tolerance){
     matrix(
       units::set_units(
         sf::st_distance(poly_centers, dflist[[2]]),
-          km
+          'km'
       ),
       nrow=nrow(poly_centers),
       ncol=nrow(dflist[[2]])
@@ -55,23 +57,21 @@ get_proximity<-function(from_poly, to_points, tolerance){
   distances$baeqRad <- from_poly$baeqRad
 
   #Pivot longer and Calculate corrected distance
-  distances <- distances %>%
-    tidyr::pivot_longer(cols=starts_with('X'),
+  distances <- distances |>
+    tidyr::pivot_longer(cols=dplyr::starts_with('X'),
                         names_to = 'point',
                         values_to = 'Distance') |>
-    dplyr::mutate(CorrectedDistance = ifelse(Distance < as.numeric(baeqRad), Distance * 0.90, Distance))
+    dplyr::mutate(CorrectedDistance = ifelse(.data$Distance < as.numeric(.data$baeqRad),
+                                             .data$Distance * 0.90,
+                                             .data$Distance))
 
   #Calculate sum of inverse distance
-  distances<- distances %>%
-    dplyr::group_by(ID) %>%
-    dplyr::summarise(Block_Proximity_Score = ifelse(sum(Distance < tolerance)==0,
-                                             1/min(Distance),
-                                             sum(1/CorrectedDistance[Distance<tolerance])))
+  distances<- distances |>
+    dplyr::group_by(ID) |>
+    dplyr::summarise(Proximity = ifelse(sum(.data$Distance < tolerance)==0,
+                                    1/min(.data$Distance),
+                                    sum(1/.data$CorrectedDistance[.data$Distance<tolerance])))
 
-  #Merge proximity scores back into polygon layer
-  from_poly <- from_poly |>
-    cbind(distances) |>
-    dplyr::select(-c(st_areashape, baeqRad, ID))
 
-  return(from_poly)
+  return(distances$Proximity)
 }
