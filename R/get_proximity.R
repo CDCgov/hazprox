@@ -67,7 +67,7 @@ get_proximity<-function(from_poly, to_points, tolerance){
 
   #Calculate sum of inverse distance
   distances<- distances |>
-    dplyr::group_by(ID) |>
+    dplyr::group_by(.data$ID) |>
     dplyr::summarise(Proximity = ifelse(sum(.data$Distance < tolerance)==0,
                                     1/min(.data$Distance),
                                     sum(1/.data$CorrectedDistance[.data$Distance<tolerance])))
