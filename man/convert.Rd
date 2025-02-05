@@ -47,8 +47,4 @@ The difference is only 6.6 per billion (roughly 1 in 152 million), which is less
 convert(1, 'mi', 'km')
 convert(c(1e6, 1), 'sqm', 'sqkm')
 }
-\seealso{
-\code{\link{get.distances}} which allows you to specify a search radius and
-get distances only within that radius, and related functions.
-}
 \concept{proximity}
