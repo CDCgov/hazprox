@@ -4,15 +4,16 @@
 \alias{get_proximity}
 \title{get_proximity}
 \usage{
-get_proximity(from_poly, to_points, tolerance)
+get_proximity(from_poly, to_points, tolerance = NULL)
 }
 \arguments{
-\item{from_poly}{A spatial polygon layer}
+\item{from_poly}{An spatial polygon layer with class sf or sfc. Proximity
+statistics will be calculated for each polygon in this layer.}
 
-\item{to_points}{A spatial points layer that represents the
-environmental hazards.}
+\item{to_points}{A spatial points layer with class sf or sfc
+representing the environmental hazard of interest.}
 
-\item{tolerance}{The maximum search distance for environmental hazards.}
+\item{tolerance}{The maximum search distance for environmental hazards (optional).}
 }
 \description{
 Function to calculate overall proximity to point-source

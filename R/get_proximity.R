@@ -9,18 +9,18 @@
 #' within the specified tolerance only consider the single
 #' nearest distance.
 
-#' @param from_poly A spatial polygon layer
-#'
-#' @param to_points A spatial points layer that represents the
-#' environmental hazards.
-#' @param tolerance The maximum search distance for environmental hazards.
+#' @param from_poly An spatial polygon layer with class sf or sfc. Proximity
+#' statistics will be calculated for each polygon in this layer.
+#' @param to_points A spatial points layer with class sf or sfc
+#' representing the environmental hazard of interest.
+#' @param tolerance The maximum search distance for environmental hazards (optional).
 #'
 #' @importFrom rlang .data
 #'
 #' @export
-get_proximity<-function(from_poly, to_points, tolerance){
+get_proximity<-function(from_poly, to_points, tolerance=NULL){
 
-  #Ensure polygon and points are in same projection
+  #Ensure polygon and points are sf objects with same CRS
   dflist <- sync_projection(from_poly, to_points)
 
   #Calculate block area in square kilometers
@@ -64,6 +64,11 @@ get_proximity<-function(from_poly, to_points, tolerance){
     dplyr::mutate(CorrectedDistance = ifelse(.data$Distance < as.numeric(.data$baeqRad),
                                              .data$Distance * 0.90,
                                              .data$Distance))
+
+  #If tolerance is not provided, set to maximum distance
+  if (missing(tolerance)) {
+    tolerance <- max(distances$Distance, na.rm=T)
+  }
 
   #Calculate sum of inverse distance
   distances<- distances |>
