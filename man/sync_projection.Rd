@@ -7,9 +7,9 @@
 sync_projection(df1, df2)
 }
 \arguments{
-\item{df1}{A spatial data frame}
+\item{df1}{An object of class sf of sfc}
 
-\item{df2}{A spatial data frame}
+\item{df2}{An object of class sf of sfc}
 }
 \value{
 A list object containing both spatial data frames projected in the same CRS.
