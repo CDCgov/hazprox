@@ -1,0 +1,85 @@
+---
+title: "avg-proximity-by-county"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{avg-proximity-by-county}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this example, we will calculate proximity to Superfund sites among all block groups in the state of Georgia. Next we will find the average the proximity of residents for each county. 
+
+```{r setup, message=FALSE}
+library(hazprox)
+library(dplyr)
+library(sf)
+```
+
+## Inspect Data 
+
+The data on **National Priority List (NPL) Superfund locations** we will be using for this analysis come from the Environmental Protection Agency's Envirofacts database and include all sites located in Georgia or within 5 km of the state boundary. 
+
+```{r}
+data("npls", package='hazprox')
+data("gabgrps", package='hazprox')
+```
+
+### View of Georgia Superfund (NPL) sites.
+```{r fig1, fig.height=4, fig.width= 6}
+plot(st_geometry(gabgrps), axes=T, col='darkgray', border = NA)
+plot(npls$geometry, col='red', cex=1, pch=8, add=T)
+```
+
+## Calculate proximity by block group
+
+For each block group, we will calculate the overall proximity to Superfund sites using the get_proximity() function. The proximity measure is the sum of the inverse distances between the block group centroid and all Superfund sites within a specified threshold. For this example, we will consider all Superfund sites within 10 km. 
+
+The function requires that the input data have the same projected coordinate system. If one layer is not projected, the function will project that layer in the same system as the other input. 
+
+```{r}
+gabgrps$Proximity <- get_proximity(gabgrps, npls, tolerance = 10)
+```
+
+### View proximity distribution
+```{r, fig2, fig.height=3, fig.width= 6}
+plot(density(gabgrps$Proximity, bw=0.01), col='red', main="Kernel Density of Proximity")
+polygon(density(gabgrps$Proximity, bw=0.01), col="red")
+```
+
+### View map of Superfund proximity in Georgia
+```{r, fig3, fig.height=5, fig.width=5}
+if(require(ggplot2)) {
+  gabgrps |>
+    ggplot2::ggplot() +
+    ggplot2::geom_sf(aes(fill = Proximity), color=NA) +
+    ggplot2::scale_fill_gradientn(colors = c( "#023FA5", "#E2E2E2", "red"), 
+                                  values = c(0, 0.10, 0.15, 4)) 
+}
+```
+
+## View average proximity at the county level
+
+Next, we will calculate a population-weighted average proximity to Superfund sites for each county in Georgia. The COUNTYFP field indicates which county each block group falls into. 
+
+```{r}
+gacnty <- avg_proximity(gabgrps, npls, tolerance = 5, group='COUNTYFP',  pop_weights = gabgrps$POP)
+```
+
+```{r, fig4, fig.height=5, fig.width=5}
+if(require(ggplot2)){
+  gacnty |>
+    ggplot2::ggplot() +
+      ggplot2::geom_sf(aes(fill = avg_prox), color=NA) +
+      ggplot2::scale_fill_distiller(palette = "Spectral") +
+      ggplot2::labs(title = 'Population-Weighted Average Proximity to Superfund Sites by County', 
+                    subtitle = 'Georgia, 2025') +
+      ggplot2::theme_minimal()
+}
+```
