@@ -17,11 +17,11 @@
 #'   \item{geometry}{geometry}
 #'   ...
 #' }
-#' @source [https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html]
-#' @source [https://www.census.gov/programs-surveys/acs/data.html]
+#' @source \url{https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html}
+#' @source \url{https://www.census.gov/programs-surveys/acs/data.html}
 #'
 #' @seealso
-#' The script used to create the gabgrps dataset: [https://github.com/cdcent/hazprox/blob/main/data-raw/gabgrps.R]
+#' The script used to create the gabgrps dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/gabgrps.R}
 #'
 "gabgrps"
 
@@ -51,7 +51,48 @@
 #' }
 #' @source https://enviro.epa.gov/
 #' @seealso
-#' The script used to create the npls dataset: [https://github.com/cdcent/hazprox/blob/main/data-raw/npls.R]
+#' The script used to create the npls dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/npls.R}
 #'
 #'
 "npls"
+
+#' Georgia Fire Locations
+#'
+#' This dataset includes a subset of records from the National Interagency Fire
+#' Occurrence 6th Edition 1992-2020, published by the U.S. Forest Service. The
+#' Georgia Fire Locations dataset, \strong{ga_fires.csv}, includes fires occurring
+#' in the state of Georgia from 2016 through 2020.
+#'
+#' National Interagency Fire Occurrence records were acquired from the reporting
+#' systems of federal, state, and local fire organizations. Data are
+#' available for use under Creative Commons Attribution v4.0 License.
+#'
+#' @references
+#' Short, Karen C. 2022. Spatial wildfire occurrence data for the United States, 1992-2020 [FPA_FOD_20221014]. 6th Edition.
+#' Fort Collins, CO: Forest Service Research Data Archive. https://doi.org/10.2737/RDS-2013-0009.6}
+#'
+#'
+#' @format ## `ga_fires`
+#' A comma separated file with 16,195 rows and 11 columns:
+#' \describe{
+#'   \item{Id}{Unique identifier of the incident}
+#'   \item{Name}{Descriptive name of fire}
+#'   \item{Year}{Year of the incident discovery}
+#'   \item{Date}{Date of incident discovery}
+#'   \item{CauseType}{Reason the fire occurred (Human, Natural, Missing, Unknown)}
+#'   \item{Event}{Event or circumstance that started or led to fire}
+#'   \item{ControlDate}{Date fire was declared controlled or contained}
+#'   \item{Acres}{Estimate of total area burned}
+#'   \item{Owner}{Agency responsible for responding at origin}
+#'   \item{Lat}{Latitude (NAD83) for point location of the fire (decimal degrees) }
+#'   \item{Lon}{Longitude (NAD83) for point location of the fire (decimal degrees)}
+#'   ...
+#' }
+#' @source \url{https://catalog.data.gov/dataset/national-interagency-fire-occurrence-sixth-edition-1992-2020-feature-layer}
+#' @source \url{https://www.fs.usda.gov/rds/archive/catalog/RDS-2013-0009.6}
+#'
+#' @seealso
+#' The script used to create the ga_fires dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/ga-fires.R}
+#'
+"gabgrps"
+
