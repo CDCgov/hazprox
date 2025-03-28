@@ -49,7 +49,7 @@
 #'   \item{geometry}{geometry}
 #'   ...
 #' }
-#' @source https://enviro.epa.gov/
+#' @source \url{https://enviro.epa.gov/}
 #' @seealso
 #' The script used to create the npls dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/npls.R}
 #'
@@ -69,7 +69,7 @@
 #'
 #' @references
 #' Short, Karen C. 2022. Spatial wildfire occurrence data for the United States, 1992-2020 [FPA_FOD_20221014]. 6th Edition.
-#' Fort Collins, CO: Forest Service Research Data Archive. https://doi.org/10.2737/RDS-2013-0009.6}
+#' Fort Collins, CO: Forest Service Research Data Archive. https://doi.org/10.2737/RDS-2013-0009.6
 #'
 #'
 #' @format ## `ga_fires`
@@ -94,5 +94,5 @@
 #' @seealso
 #' The script used to create the ga_fires dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/ga-fires.R}
 #'
-"gabgrps"
+"ga_fires"
 

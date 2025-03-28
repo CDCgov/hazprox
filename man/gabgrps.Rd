@@ -19,9 +19,9 @@ A spatial data frame with 7,441 rows and 5 columns:
 }
 }
 \source{
-\link{https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html}
+\url{https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html}
 
-\link{https://www.census.gov/programs-surveys/acs/data.html}
+\url{https://www.census.gov/programs-surveys/acs/data.html}
 }
 \usage{
 gabgrps
@@ -36,6 +36,6 @@ The dataset also includes a field containing total population counts from
 2023 American Community Survey (ACS) 5-Year Estimates.
 }
 \seealso{
-The script used to create the gabgrps dataset: \link{https://github.com/cdcent/hazprox/blob/main/data-raw/gabgrps.R}
+The script used to create the gabgrps dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/gabgrps.R}
 }
 \keyword{datasets}
