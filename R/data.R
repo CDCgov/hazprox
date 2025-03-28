@@ -1,11 +1,14 @@
 #' Georgia Block Groups
 #'
-#' A dataset from the U.S. Census TIGER cartographic boundary files (v2023) which
-#' includes all 2020 block groups in the state of Georgia. Also includes
-#' population counts from 2023 American Community Survey 5-Year Estimates.
+#' A spatial polygon dataset from the U.S. Census TIGER cartographic boundary files
+#' (v2023). This dataset includes all 2020 block groups in the state of Georgia. Data
+#' are projected in NAD83(CSRS) / UTM zone 19N.
 #'
-#' @format ## `gabrgps`
-#' A data frame with 7,441 rows and 5 columns:
+#' The dataset also includes a field containing total population counts from
+#' 2023 American Community Survey (ACS) 5-Year Estimates.
+#'
+#' @format ## `gabgrps`
+#' A spatial data frame with 7,441 rows and 5 columns:
 #' \describe{
 #'   \item{STATE}{State abbreviation}
 #'   \item{GEOID}{12 digit unique identifier of the block group}
@@ -14,17 +17,21 @@
 #'   \item{geometry}{geometry}
 #'   ...
 #' }
-#' @source https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-#' @source https://www.census.gov/programs-surveys/acs/data.html
+#' @source [https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html]
+#' @source [https://www.census.gov/programs-surveys/acs/data.html]
+#'
+#' @seealso
+#' The script used to create the gabgrps dataset: [https://github.com/cdcent/hazprox/blob/main/data-raw/gabgrps.R]
 #'
 "gabgrps"
 
 
 #' National Priority List/Superfund Sites
 #'
-#' A dataset containing information on National Priority List, otherwise known
-#' as Superfund sites in the state of Georgia or within 5 km of the state
-#' boundary. Data were queried from the EPA Envirofacts API on January 9, 2025.
+#' A spatial points data frame containing National Priority List (otherwise known
+#' as Superfund) sites in the state of Georgia or within 5 km of the state
+#' boundary. Data are projected in NAD83(CSRS) / UTM zone 19N. Data were queried
+#' from the EPA Envirofacts API on January 9, 2025.
 #'
 #' @format ## `npls`
 #' A data frame with 17 rows and 13 columns:
@@ -43,5 +50,8 @@
 #'   ...
 #' }
 #' @source https://enviro.epa.gov/
+#' @seealso
+#' The script used to create the npls dataset: [https://github.com/cdcent/hazprox/blob/main/data-raw/npls.R]
+#'
 #'
 "npls"
