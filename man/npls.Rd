@@ -37,6 +37,6 @@ boundary. Data are projected in NAD83(CSRS) / UTM zone 19N. Data were queried
 from the EPA Envirofacts API on January 9, 2025.
 }
 \seealso{
-The script used to create the npls dataset: \link{https://github.com/cdcent/hazprox/blob/main/data-raw/npls.R}
+The script used to create the npls dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/npls.R}
 }
 \keyword{datasets}
