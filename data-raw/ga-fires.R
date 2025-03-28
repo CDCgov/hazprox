@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Creates a dataset for fires occurring in the state of Georgia between 2011
+# Creates a dataset for fires occurring in the state of Georgia between 2016
 # and 2020. Data are queried from the National Interagency Fire Occurrence 6th
 # Edition 1992-2020 (Feature Layer). The wildfire records were acquired from the
 # reporting systems of federal, state, and local fire organizations. Data are
@@ -26,12 +26,11 @@ download.file(url = url, destfile = paste0(file_path, file_name, sep = ""))
 fires <- read.csv(file = paste0(file_path, file_name))
 
 #Select fires occurring in Georgia from 2011 through 2020
-ga_fires <- fires |> filter(STATE == 'GA' & FIRE_YEAR > 2010)
+ga_fires <- fires |> filter(STATE == 'GA' & FIRE_YEAR > 2015)
 
 #Select variables for analysis
 ga_fires <- ga_fires |>
   select(Id = FOD_ID, #UNIQUE ID
-         Source = SOURCE_SYSTEM_TYPE, #REPORTING SOURCE TYPE
          Name = FIRE_NAME, # NAME OF INCIDENT
          Year= FIRE_YEAR, # YEAR OF DISCOVERY
          Date = DISCOVERY_DATE, # DATE OF DISCOVERY
@@ -39,9 +38,9 @@ ga_fires <- ga_fires |>
          Event = NWCG_GENERAL_CAUSE, #Event or circumstance that started or led to fire
          ControlDate = CONT_DATE, #Date fire was controlled
          Acres = FIRE_SIZE, #Estimate of total area burned
+         Owner = OWNER_DESCR, #Agency responsible for responding at origin
          Lat = LATITUDE,
-         Lon = LONGITUDE,
-         Owner = OWNER_DESCR #Agency responsible for responding at origin
+         Lon = LONGITUDE
   )
 
 #--------------------------------------------------------------------------------------
