@@ -46,5 +46,9 @@ ga_fires <- ga_fires |>
 #--------------------------------------------------------------------------------------
 #Write Data
 #--------------------------------------------------------------------------------------
+usethis::use_data(ga_fires, overwrite = TRUE)
+
+#save a raw dataset in external data folder for illustrating data preparation
+#in vignettes.
 write.csv(ga_fires, "inst/extdata/ga_fires.csv", row.names = FALSE)
 
