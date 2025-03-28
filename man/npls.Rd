@@ -31,8 +31,12 @@ https://enviro.epa.gov/
 npls
 }
 \description{
-A dataset containing information on National Priority List, otherwise known
-as Superfund sites in the state of Georgia or within 5 km of the state
-boundary. Data were queried from the EPA Envirofacts API on January 9, 2025.
+A spatial points data frame containing National Priority List (otherwise known
+as Superfund) sites in the state of Georgia or within 5 km of the state
+boundary. Data are projected in NAD83(CSRS) / UTM zone 19N. Data were queried
+from the EPA Envirofacts API on January 9, 2025.
+}
+\seealso{
+The script used to create the npls dataset: \link{https://github.com/cdcent/hazprox/blob/main/data-raw/npls.R}
 }
 \keyword{datasets}

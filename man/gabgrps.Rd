@@ -5,9 +5,9 @@
 \alias{gabgrps}
 \title{Georgia Block Groups}
 \format{
-\subsection{\code{gabrgps}}{
+\subsection{\code{gabgrps}}{
 
-A data frame with 7,441 rows and 5 columns:
+A spatial data frame with 7,441 rows and 5 columns:
 \describe{
 \item{STATE}{State abbreviation}
 \item{GEOID}{12 digit unique identifier of the block group}
@@ -19,16 +19,23 @@ A data frame with 7,441 rows and 5 columns:
 }
 }
 \source{
-https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
+\link{https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html}
 
-https://www.census.gov/programs-surveys/acs/data.html
+\link{https://www.census.gov/programs-surveys/acs/data.html}
 }
 \usage{
 gabgrps
 }
 \description{
-A dataset from the U.S. Census TIGER cartographic boundary files (v2023) which
-includes all 2020 block groups in the state of Georgia. Also includes
-population counts from 2023 American Community Survey 5-Year Estimates.
+A spatial polygon dataset from the U.S. Census TIGER cartographic boundary files
+(v2023). This dataset includes all 2020 block groups in the state of Georgia. Data
+are projected in NAD83(CSRS) / UTM zone 19N.
+}
+\details{
+The dataset also includes a field containing total population counts from
+2023 American Community Survey (ACS) 5-Year Estimates.
+}
+\seealso{
+The script used to create the gabgrps dataset: \link{https://github.com/cdcent/hazprox/blob/main/data-raw/gabgrps.R}
 }
 \keyword{datasets}
