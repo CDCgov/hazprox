@@ -27,13 +27,13 @@ library(sf)
 The data on **National Priority List (NPL) Superfund locations** we will be using for this analysis come from the Environmental Protection Agency's Envirofacts database and include all sites located in Georgia or within 5 km of the state boundary. 
 
 ```{r}
-data("npls", package='hazprox')
-data("gabgrps", package='hazprox')
+#data("npls", package='hazprox')
+#data("gabgrps", package='hazprox')
 ```
 
 ### View of Georgia Superfund (NPL) sites.
 ```{r fig1, fig.height=4, fig.width= 6}
-plot(st_geometry(gabgrps), axes=T, col='darkgray', border = NA)
+plot(st_geometry(gabgrps), col='darkgray', border = NA)
 plot(npls$geometry, col='red', cex=1, pch=8, add=T)
 ```
 
