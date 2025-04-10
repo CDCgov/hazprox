@@ -1,6 +1,11 @@
-# Adapted from code developed by Matthew A. Birk for the measurements package.
-# Converts common units of length to kilometers
-
+#' Convert length to kilometers.
+#'
+#' @description Converts a numeric length value with specified units to kilometers.
+#' @param x a numeric value
+#' @param from The original units of x
+#'
+#' @source Adapted from code developed by Matthew A. Birk for the measurements package.
+#' @noRd
 .conversions = data.frame(dim = character(0), unit = character(0), std = numeric(0))
 .conversions = rbind(.conversions,
 
@@ -33,9 +38,9 @@
 	data.frame(unit = 'point', std = 100/2.54*72)
 )
 
-conv_unit = function(x, from){
+to_km = function(x, from){
 	unit = std = NULL
-	if(nrow(subset(.conversions,unit==from,dim))==0) stop('the \'from\' argument is not an acceptable unit.')
+	if(nrow(subset(.conversions,unit==from))==0) stop('the \'from\' argument is not an acceptable unit.')
 	value = x / subset(.conversions, unit == from, std, drop = TRUE)
 	return(value * 0.001)
 }
