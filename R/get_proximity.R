@@ -14,11 +14,12 @@
 #' @param to_points A spatial points layer with class sf or sfc
 #' representing the environmental hazard of interest.
 #' @param tolerance The maximum search distance for environmental hazards (optional).
+#' @param units The units of the tolerance value (e.g., "m" ,  "km", "ft", "yd",  "fathom", "mi", "naut_mi", "au")
 #'
 #' @importFrom rlang .data
 #'
 #' @export
-get_proximity<-function(from_poly, to_points, tolerance=NULL){
+get_proximity<-function(from_poly, to_points, tolerance=NULL, units = 'km'){
 
   #Ensure polygon and points are sf objects with same CRS
   dflist <- sync_projection(from_poly, to_points)
@@ -65,9 +66,11 @@ get_proximity<-function(from_poly, to_points, tolerance=NULL){
                                              .data$Distance * 0.90,
                                              .data$Distance))
 
-  #If tolerance is not provided, set to maximum distance
+  #If tolerance is not provided, set to maximum distance. Otherwise convert to km
   if (missing(tolerance)) {
     tolerance <- max(distances$Distance, na.rm=T)
+  }
+    else {tolerance <- to_km(tolerance, from = units)
   }
 
   #Calculate sum of inverse distance
