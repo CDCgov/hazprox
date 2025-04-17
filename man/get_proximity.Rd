@@ -4,7 +4,13 @@
 \alias{get_proximity}
 \title{get_proximity}
 \usage{
-get_proximity(from_poly, to_points, tolerance = NULL, units = "km")
+get_proximity(
+  from_poly,
+  to_points,
+  tolerance = NULL,
+  units = "km",
+  weights = NULL
+)
 }
 \arguments{
 \item{from_poly}{An spatial polygon layer with class sf or sfc. Proximity
@@ -15,7 +21,10 @@ representing the environmental hazard of interest.}
 
 \item{tolerance}{The maximum search distance for environmental hazards (optional).}
 
-\item{units}{The units of the tolerance value (e.g., "m" ,  "km", "ft", "yd",  "fathom", "mi", "naut_mi", "au")}
+\item{units}{The units of the tolerance value (e.g., "m" ,  "km", "ft", "yd",  "fathom", "mi", "naut_mi", "au"),
+if tolerance is specified.}
+
+\item{weights}{An optional vector with the same length as to_points that applies a weight to each hazard.}
 }
 \description{
 Function to calculate overall proximity to point-source
