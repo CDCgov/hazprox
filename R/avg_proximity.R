@@ -27,8 +27,8 @@ avg_proximity <- function(from_poly, to_points, tolerance, group, pop_weights=NU
 
   #Calculate proximity for each unit of from_poly
   from_poly$unit_prox <- get_proximity(
-        from_poly = from_poly,
-        to_points = to_points,
+        from = from_poly,
+        to = to_points,
         tolerance = tolerance
         )
 
