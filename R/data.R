@@ -68,7 +68,7 @@
 #' available for use under Creative Commons Attribution v4.0 License.
 #'
 #' @references
-#' Short, Karen C. 2022. Spatial wildfire occurrence data for the United States, 1992-2020 [FPA_FOD_20221014]. 6th Edition.
+#' Short, Karen C. 2022. Spatial wildfire occurrence data for the United States, 1992-2020 (FPA_FOD_20221014). 6th Edition.
 #' Fort Collins, CO: Forest Service Research Data Archive. https://doi.org/10.2737/RDS-2013-0009.6
 #'
 #'
