@@ -33,7 +33,6 @@ non-exclusive, transferable license to all users under the terms of the
 later.
 
 ### Requesting Changes
-- [Report a bug](bug-report.yml)
 - [Open an issue](https://github.com/cdcent/proximity-tool/issues/new/choose). 
 
 ## Public Domain Standard Notice
