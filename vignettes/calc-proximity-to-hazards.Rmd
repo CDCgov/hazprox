@@ -11,7 +11,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  rmarkdown.html_vignette.check_title = FALSE
 )
 ```
 
@@ -19,7 +20,7 @@ knitr::opts_chunk$set(
 
 The get_proximity() function allows a user to calculate the total, cumulative proximity to environmental hazards for a given area. This function can be useful for quantifying total environmental risks of an administrative area, such as a census block, census, tract, or neighborhood. Total proximity is calculated by summing the inverse distances between the geometric center of each area and all hazards within a given search distance. 
 
-In this example, we will calculate the cumulative proximity to fires with natural causes for block groups in the State of Georgia. The fire location dataset, `ga_fires.csv` is sourced from the National Interagency Fire Occurrence 6th Edition (1992-2020) dataset provided by the U.S. Forest Service. These data are bundled with the hazprox package. A simple feature dataset representing all 2020 block groups in the State of Georgia, `gabgrps` is also included in the package. 
+In this example, we will calculate the cumulative proximity to fires for block groups in the State of Georgia. The fire location dataset, `ga_fires.csv` is sourced from the National Interagency Fire Occurrence 6th Edition (1992-2020) dataset provided by the U.S. Forest Service. These data are bundled with the hazprox package. A simple feature dataset representing all 2020 block groups in the State of Georgia, `gabgrps` is also included in the package. 
 
 ```{r setup, message = FALSE}
 library(hazprox)
@@ -48,11 +49,7 @@ We can use the `st_crs()` function from the `sf` package to view information abo
 st_crs(gabgrps)$proj4string
 ```
 
-Although the `gabgrps` dataset is a projected simple feature dataset, the `ga_fires` dataset is not spatial data. However, each record in the `ga_fires` dataset contain x,y coordinates stored in the Lat and Lon fields. These coordinates represent the origin location for each fire. We will need to convert these records into spatial points before calculating proximity. 
-
-```{r}
-head(ga_fires, n=2)
-```
+Although the `gabgrps` dataset is a projected simple feature dataset, the `ga_fires` dataset is not spatial data. However, each record in the `ga_fires` dataset contain x,y coordinates stored in the Lat and Lon fields. These coordinates represent the origin location for each fire. We will need to convert these records into spatial points before calculating proximity. The `ga_fires`
 
 ## Prepare data for analysis
 
@@ -62,30 +59,46 @@ The `ga_fires` documentation indicates that the geographic coordinates are in No
 fires_sf <- sf::st_as_sf(ga_fires, coords = c('Lon', 'Lat'), crs = 4269)
 ```
 
-Let's take a look at our fires data. We are only interested in fires with natural causes, so we will exclude fires caused by humans or with unknown causes.
+
+The `ga_fires` dataset also contains a field for the total number of acres burned (Acres). We can use this information to weight the fires by severity. First, let's examine the distribution of acres burned. 
+
+```{r}
+summary(fires_sf$Acres)
+```
+The number of acres burned shows a highly right-skewed distribution. Most fires are relatively small (less than one acre); however, the largest fire burned ~29K acres. For this analysis, we will exclude fires less than one acre and create a weight for the number of acres burned. Due to the skewed distribution, we will log-transform acres. 
+
+```{r}
+fires_sf <- fires_sf |> 
+  filter(Acres >= 1) |>
+  mutate(severity  = log(Acres))
+```
+
+## Visualize fires 
+
+Let's take a look at our where fires are located throughout Georgia. We will use vary the size of the point by the number of acres burned. 
 
 ```{r, fig.dim=c(6, 5)}
-fires_sf <- fires_sf |> filter(CauseType == 'Natural') 
-
 fires_sf |>
   ggplot() +
   geom_sf(data=gabgrps, color='gray', fill='white') +
-  geom_sf(color='navy') +
-  labs(title = 'Natural Cause Fires Occuring in Georgia, 2016-2020')+
+  geom_sf(aes(size = severity, color=severity), alpha = 0.25) +
+  scale_color_distiller(palette = "Spectral") +
+  labs(title = 'Fires (1+ Acres) Occuring in Georgia, 2016-2020')+
   theme_minimal()
 ```
 
-It looks like most fires are concentrated in the southeast quadrant of the state. 
+Fires are well dispersed throughout the state with the exception of the Atlanta metro area. The largest fires are located along the norther border and in the southeast corner of the state. 
 
 ## Calculate proximity 
 
-Next, we will examine how the cumulative proximity if distributed across block groups in the state using the `get_proximity()` function. We can add the proximity score as a field in the block groups dataset by assigning the output of get_proximity to a new field, Proximity. We will exclude fires occurring more than 10 km from each block group boundary by setting the tolerance to 10.
+Next, let's examine how the cumulative proximity if distributed across block groups in the state using the `get_proximity()` function. We will weight each fire by the log of the total acres burned (Severity). We can also exclude fires occurring more than 10 km from each block group boundary by setting the tolerance to 10. Note, other units of length can be used to specify the tolerance by providing a units argument (e.g., units = 'mi').
+
 
 Although we converted our fires data to spatial data with an associated geographic coordinate reference system, these data are not currently projected. Typically we want both our polygon layer (gabgrps) and our hazards (fires_sf) to have the same projected CRS, but let's see what happens if we neglect to project one of our inputs. 
 
 ```{r}
-gabgrps <- gabgrps |>
-  mutate(Proximity = get_proximity(gabgrps, fires_sf, tolerance = 10))
+Proximity <- get_proximity(gabgrps, fires_sf, tolerance = 10, weights = fires_sf$severity)
+gabgrps$Proximity <- Proximity
 ```
 
 When we use the get_proximity function, we get the following warning message:
@@ -101,19 +114,17 @@ Now let's examine some descriptive statistics of the Proximity field.
 
 ```{r, fig.dim = c(4, 3)}
 ggplot(gabgrps, aes(Proximity)) +
-  geom_histogram()
+  geom_histogram(fill = 'navy', color = 'white')
 ```
 
-Most block groups have relatively low proximity. The median score is `r median(gabgrps$Proximity)` However, a few block groups have very proximity scores. We can use `ggplot2` to visualize the geographic districution of block groups by proximity score. 
+Most block groups have relatively low proximity. The median score is `r median(gabgrps$Proximity)` However, a few block groups have very high proximity scores. We can use `ggplot2` to visualize the geographic distribution of block groups by proximity score. 
 
 ```{r, fig.dim = c(6, 5)}
 gabgrps |>
   ggplot(aes(fill=Proximity)) +
   geom_sf(color=NA) +
-  scale_fill_viridis_c() +
+  scale_fill_distiller(palette = "Spectral") +
   labs(title = 'Block Group Proximity to Natural Cause Fires', 
        subtitle = 'Georgia, 2016-2020')+
   theme_minimal()
 ```
-
-

@@ -67,7 +67,7 @@ get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
   result_list <- vector("numeric", length = nrow(from))
 
 
-  for (i in seq_len(nrow(to))) {
+  for (i in seq_len(nrow(from))) {
     dists <- distances[i, ]
     within_tol <- dists < tol_km
 
