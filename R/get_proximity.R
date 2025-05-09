@@ -11,13 +11,12 @@
 
 #' @param from An spatial polygon layer with class sf or sfc. Proximity
 #' statistics will be calculated for each polygon in this layer.
-#' @param to A spatial points layer with class sf or sfc
-#' representing the environmental hazard of interest.
+#' @param to A spatial polygon, point, or linestring layer with class sf or sfc
+#' representing the environmental hazard(s) of interest.
 #' @param tolerance The maximum search distance for environmental hazards (optional).
 #' @param units The units of the tolerance value (e.g., "m" ,  "km", "ft", "yd",  "fathom", "mi", "naut_mi", "au"),
 #' if tolerance is specified.
-#' @param weights An optional vector with the same length as to_points that applies
-#' a weight to each hazard.
+#' @param weights An optional vector with the same length as to that applies a weight to each hazard.
 #'
 #'
 #' @importFrom rlang .data
