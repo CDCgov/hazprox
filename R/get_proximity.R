@@ -30,9 +30,12 @@ get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
   }
 
   if(length(weights) != nrow(to))
-    stop("'to' and 'weights' must have the same length")
+    stop("`to` and `weights` must have the same length")
 
-  #weights = data.frame(wt = weights, point = paste0('X', 1:nrow(to)))
+  #Verify `from` input is a spatial polygon
+  if(!inherits(from, "sf") || !any(sf::st_geometry_type(from) %in% c("POLYGON", "MULTIPOLYGON"))){
+    stop('Error: `from` must be a spatial polygon')
+  }
 
   #Ensure polygon and points are sf objects with same CRS
   dflist <- sync_projection(from, to)
