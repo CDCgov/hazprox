@@ -14,7 +14,7 @@
 #' @param to A spatial polygon, point, or linestring layer with class sf or sfc
 #' representing the environmental hazard(s) of interest.
 #' @param tolerance The maximum search distance for environmental hazards (optional).
-#' @param units The units of the tolerance value (e.g., "m" ,  "km", "ft", "yd",  "fathom", "mi", "naut_mi", "au"),
+#' @param units The units of the tolerance value (e.g., "m", "km", "ft", "yd", "fathom", "mi", "naut_mi", "au"),
 #' if tolerance is specified.
 #' @param weights An optional vector with the same length as to that applies a weight to each hazard.
 #'
