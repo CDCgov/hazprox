@@ -25,6 +25,33 @@
 #'
 "gabgrps"
 
+#' Georgia Census Tracts
+#'
+#' A spatial polygon dataset from the U.S. Census TIGER cartographic boundary files
+#' (v2023). This dataset includes all 2020 census tracts in the state of Georgia. Data
+#' are projected in NAD83(CSRS) / UTM zone 19N.
+#'
+#' The dataset also includes a field containing total population counts from
+#' 2023 American Community Survey (ACS) 5-Year Estimates.
+#'
+#' @format ## `gabgrps`
+#' A spatial data frame with 2,791 rows and 5 columns:
+#' \describe{
+#'   \item{STATE}{State abbreviation}
+#'   \item{GEOID}{11 digit unique identifier of the tract}
+#'   \item{LSAD}{Year}
+#'   \item{POP}{Estimate of total population}
+#'   \item{geometry}{geometry}
+#'   ...
+#' }
+#' @source \url{https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html}
+#' @source \url{https://www.census.gov/programs-surveys/acs/data.html}
+#'
+#' @seealso
+#' The script used to create the ga dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/}
+#'
+"ga"
+
 
 #' National Priority List/Superfund Sites
 #'
