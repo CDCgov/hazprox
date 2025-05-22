@@ -4,25 +4,24 @@
 \alias{avg_proximity}
 \title{avg_proximity}
 \usage{
-avg_proximity(from_poly, to_points, tolerance, group, pop_weights = NULL)
+avg_proximity(from, to, ..., group, pop_weights = NULL)
 }
 \arguments{
-\item{from_poly}{A spatial polygon layer}
+\item{from}{A spatial polygon layer with class sf or sfc. Proximity is calculated from
+the geometric center of each polygon to each hazard within the search tolerance.}
 
-\item{to_points}{A spatial points layer that represents the
-environmental hazards.}
+\item{to}{A spatial polygon, point, or linestring layer with class sf or sfc
+representing the environmental hazard(s) of interest.}
 
-\item{tolerance}{The maximum search distance for environmental hazards.}
+\item{...}{Additional parameters}
 
-\item{group}{Name of variable in the from_poly layer that defines the group means
-are calculated for.}
+\item{group}{Name of grouping variable in the \code{from} layer. Average proximity is calculated
+among polygons nested in the group.}
 
-\item{pop_weights}{An optional vector of population weights if
-weighted-averages are desired.}
+\item{pop_weights}{An optional vector of population weights if weighted-averages are desired.}
 }
 \description{
-Function to calculate average proximity to point-source
-environmental hazards within a specified area. The function
-will calculate a population weighted average if the user
-supplies a vector of population counts or weights.
+Function to calculate average proximity to environmental hazards within a specified area.
+The function will calculate a population weighted average if the user supplies a vector
+of population counts or weights.
 }
