@@ -33,6 +33,7 @@ set.seed(123)
 w <- floor(runif(nrow(npls), min=0, max=10))
 #calculate proximity to all superfund sites
 p <- get_proximity(from=ga, to=npls, weights = w)
+ga$Proximity <- p
 plot(ga['Proximity'])
 #calculate proximity to superfund sites within 10 miles of tract boundary
 p10 <- get_proximity(from=ga, to=npls, tolerance = 10, units = 'mi', weights = w)
