@@ -16,6 +16,14 @@
 #'
 #' @importFrom rlang .data
 #'
+#' @examples
+#' #find average census tract proximity to Superfund sites by county
+#' ga$County <- substr(ga$GEOID, 1, 5)
+#' counties <- avg_proximity(ga, npls,  group='County')
+#' plot(counties['avg_prox'])
+#' #find population-weighted average tract proximity to Superfund sites by county
+#' counties_wt <- avg_proximity(ga, npls,  group='County', pop_weights = ga$POP)
+#'
 #' @export
 avg_proximity <- function(from, to, ...,  group, pop_weights=NULL) {
 

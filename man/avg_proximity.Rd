@@ -25,3 +25,12 @@ Function to calculate average proximity to environmental hazards within a specif
 The function will calculate a population weighted average if the user supplies a vector
 of population counts or weights.
 }
+\examples{
+#find average census tract proximity to Superfund sites by county
+ga$County <- substr(ga$GEOID, 1, 5)
+counties <- avg_proximity(ga, npls,  group='County')
+plot(counties['avg_prox'])
+#find population-weighted average tract proximity to Superfund sites by county
+counties_wt <- avg_proximity(ga, npls,  group='County', pop_weights = ga$POP)
+
+}
