@@ -2,7 +2,8 @@
 % Please edit documentation in R/sync_projection.R
 \name{sync_projection}
 \alias{sync_projection}
-\title{Ensures that spatial data are in same projected coordinate system.}
+\title{Confirms that spatial data are in same projected coordinate system. Transforms unprojected input
+into the projected coordinate reference system of the other input, if defined.}
 \usage{
 sync_projection(df1, df2)
 }
@@ -15,5 +16,23 @@ sync_projection(df1, df2)
 A list object containing both spatial data frames projected in the same CRS.
 }
 \description{
-Ensures that spatial data are in same projected coordinate system.
+Confirms that spatial data are in same projected coordinate system. Transforms unprojected input
+into the projected coordinate reference system of the other input, if defined.
+}
+\examples{
+x = sf::st_polygon(list(rbind(c(33.9, -84.1),
+                              c(33.9, -84.0),
+                              c(34.0, -84.0),
+                              c(34.0, -84.1),
+                              c(33.9, -84.1))))
+y = sf::st_point(c(34.1, -84))
+x = sf::st_sfc(x, crs=4326)
+y = sf::st_sfc(y, crs=4326)
+#transform y into Albers Equal Area Conic projection
+y = sf::st_transform(y, crs = 5070)
+result <- sync_projection(x, y)
+plot(result[[1]], ylim = c(6510000, 6550000), col = NA, border = 'red')
+plot(result[[2]], add = TRUE, col =  'blue')
+
+
 }
