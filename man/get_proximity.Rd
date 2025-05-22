@@ -15,17 +15,25 @@ representing the environmental hazard(s) of interest.}
 
 \item{tolerance}{The maximum search distance for environmental hazards (optional).}
 
-\item{units}{The units of the tolerance value (e.g., "m" ,  "km", "ft", "yd",  "fathom", "mi", "naut_mi", "au"),
+\item{units}{The units of the tolerance value (e.g., "m", "km", "ft", "yd", "fathom", "mi", "naut_mi", "au"),
 if tolerance is specified.}
 
 \item{weights}{An optional vector with the same length as to that applies a weight to each hazard.}
 }
 \description{
-Function to calculate overall proximity to point-source
-environmental hazards for areas. The function calculates
-the sum of inverse distances between the geometric center
-of the area and all hazards within a specified tolerance.
-Proximity calculations for areas that do not have any hazards
-within the specified tolerance only consider the single
-nearest distance.
+Calculate the cumulative proximity to environmental hazards for geographic areas.
+The function calculates the sum of inverse distances between the geometric center
+of the area and all hazards within a specified tolerance. Proximity calculations
+for areas that do not have any hazards within the specified tolerance only consider the single
+nearest distance. A vector of weights may be applied to each hazard so that
+some hazards contribute more to the cumulative proximity score.
+}
+\examples{
+set.seed(123)
+w <- floor(runif(nrow(npls), min=0, max=10))
+#calculate proximity to all superfund sites
+p <- get_proximity(from=ga, to=npls, weights = w)
+plot(ga['Proximity'])
+#calculate proximity to superfund sites within 10 miles of tract boundary
+p10 <- get_proximity(from=ga, to=npls, tolerance = 10, units = 'mi', weights = w)
 }

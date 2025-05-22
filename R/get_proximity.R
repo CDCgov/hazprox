@@ -1,13 +1,12 @@
 #' @title get_proximity
 #'
 #' @description
-#' Function to calculate overall proximity to point-source
-#' environmental hazards for areas. The function calculates
-#' the sum of inverse distances between the geometric center
-#' of the area and all hazards within a specified tolerance.
-#' Proximity calculations for areas that do not have any hazards
-#' within the specified tolerance only consider the single
-#' nearest distance.
+#' Calculate the cumulative proximity to environmental hazards for geographic areas.
+#' The function calculates the sum of inverse distances between the geometric center
+#' of the area and all hazards within a specified tolerance. Proximity calculations
+#' for areas that do not have any hazards within the specified tolerance only consider the single
+#' nearest distance. A vector of weights may be applied to each hazard so that
+#' some hazards contribute more to the cumulative proximity score.
 
 #' @param from An spatial polygon layer with class sf or sfc. Proximity
 #' statistics will be calculated for each polygon in this layer.
@@ -22,6 +21,14 @@
 #' @importFrom rlang .data
 #'
 #' @export
+#' @examples
+#' set.seed(123)
+#' w <- floor(runif(nrow(npls), min=0, max=10))
+#' #calculate proximity to all superfund sites
+#' p <- get_proximity(from=ga, to=npls, weights = w)
+#' plot(ga['Proximity'])
+#' #calculate proximity to superfund sites within 10 miles of tract boundary
+#' p10 <- get_proximity(from=ga, to=npls, tolerance = 10, units = 'mi', weights = w)
 get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
 
   #Verify length weights matches points (if provided)
