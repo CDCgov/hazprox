@@ -1,5 +1,5 @@
 ---
-title: "avg-proximity-by-county"
+title: "Calculating population-weighted average proximity for larger areas"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{avg-proximity-by-county}
@@ -14,7 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this example, we will calculate proximity to Superfund sites among all block groups in the state of Georgia. Next we will find the average the proximity of residents for each county. 
+## Introduction
+
+In some instances, you may be interested in the average proximity to environmental hazards over a larger administrative area, such as a county or state. For example, a health agency may want to amplify messaging about air quality in counties where people tend to live closest to forest fires or increase screenings for certain cancers in counties where people tend to live closer to pollution sources. 
+
+This vignette describes how to use the `avg_prox()` to calculate the population-weighted average proximity for larger geographic areas. This example demonstrates a typical workflow, using data on National Priority List (otherwise known as Superfund) locations. A Superfund site is a contaminated area in the U.S. designated by the Environmental Protection Agency (EPA) for cleanup because it poses a risk to human health or the environment. Superfund geospatial data were derived from the [EPA's Envirofacts database](https://enviro.epa.gov/) and are bundled with the `hazprox` package as `npls`. For more information about these data, you can search the package documentation: `help('npls')`.
+
+We will calculate proximity to Superfund sites among all census tracts in the state of Georgia (`ga`). Next we will find the average the proximity of residents for each county, weighted by the population of each census tract, and display our results in a map. 
 
 ```{r setup, message=FALSE}
 library(hazprox)
@@ -22,62 +28,71 @@ library(dplyr)
 library(sf)
 ```
 
-## Inspect Data 
+## Inspect and Visualize Data 
+The `npls ` and `ga` datasets are lazy loaded with the hazprox package. Once you call `library(hazprox)`, these datasets will be available to you even though they are not loaded in the global environment. 
 
-The data on **National Priority List (NPL) Superfund locations** we will be using for this analysis come from the Environmental Protection Agency's Envirofacts database and include all sites located in Georgia or within 5 km of the state boundary. 
+### Descriptive statistics
+There are 2,791 census tract in the state of Georgia and 17 Superfund sites. 
 
 ```{r}
-#data("npls", package='hazprox')
-#data("gabgrps", package='hazprox')
+print(c("Census tracts:", nrow(ga)))
+print(c("Superfunds:", nrow(npls)))
 ```
+
 
 ### View of Georgia Superfund (NPL) sites.
 ```{r fig1, fig.height=4, fig.width= 6}
-plot(st_geometry(gabgrps), col='darkgray', border = NA)
+plot(st_geometry(ga), col='darkgray', border = NA)
 plot(npls$geometry, col='red', cex=1, pch=8, add=T)
 ```
 
-## Calculate proximity by block group
+## Calculate proximity by tract
 
-For each block group, we will calculate the overall proximity to Superfund sites using the get_proximity() function. The proximity measure is the sum of the inverse distances between the block group centroid and all Superfund sites within a specified threshold. For this example, we will consider all Superfund sites within 10 km. 
+For each census tract, we will calculate the overall proximity to Superfund sites using the get_proximity() function. The proximity measure is the sum of the inverse distances between the block group centroid and all Superfund sites within a specified threshold. For this example, we will consider all Superfund sites within 10 km of the census tract boundary. 
 
-The function requires that the input data have the same projected coordinate system. If one layer is not projected, the function will project that layer in the same system as the other input. 
+The function requires that the input data have the same projected coordinate system. If one layer is not projected, the function will project that layer in the same system as the other input. However, if neither input is projected or if each input has a different projected coordinate system, the function will return an error. 
 
 ```{r}
-gabgrps$Proximity <- get_proximity(gabgrps, npls, tolerance = 10)
+ga$Proximity <- get_proximity(ga, npls, tolerance = 10)
 ```
 
 ### View proximity distribution
+
+The distribution of proximity values reveals that most census tracts have relatively low proximity to Superfund sites. However, the distribution is heavily right-skewed, indicating that a small number of tracts are extremely close to one or more Superfund sites. 
+
 ```{r, fig2, fig.height=3, fig.width= 6}
-plot(density(gabgrps$Proximity, bw=0.01), col='red', main="Kernel Density of Proximity")
-polygon(density(gabgrps$Proximity, bw=0.01), col="red")
+plot(density(ga$Proximity, bw=0.01), col='red', main="Kernel Density of Proximity")
+polygon(density(ga$Proximity, bw=0.01), col="red")
 ```
 
 ### View map of Superfund proximity in Georgia
+
 ```{r, fig3, fig.height=5, fig.width=5}
 if(require(ggplot2)) {
-  gabgrps |>
+  ga |>
     ggplot2::ggplot() +
     ggplot2::geom_sf(aes(fill = Proximity), color=NA) +
     ggplot2::scale_fill_gradientn(colors = c( "#023FA5", "#E2E2E2", "red"), 
-                                  values = c(0, 0.10, 0.15, 4)) 
+                                  values = c(0, 0.10, 0.15, 5)) 
 }
 ```
 
 ## View average proximity at the county level
 
-Next, we will calculate a population-weighted average proximity to Superfund sites for each county in Georgia. The COUNTYFP field indicates which county each block group falls into. 
+Next, we will calculate a population-weighted average proximity to Superfund sites for each county in Georgia. We will calculate a new field, `County`, to group tracts. The census tract dataset contains a field for the total resident population, `POP` that we can use to request population-weighted averages. Omitting an argument for `pop_weights` will return a straight average. 
 
 ```{r}
-gacnty <- avg_proximity(gabgrps, npls, tolerance = 5, group='COUNTYFP',  pop_weights = gabgrps$POP)
+ga$County <- substr(ga$GEOID, 1, 5)
+gacnty <- avg_proximity(ga, npls, tolerance = 10, group='County',  pop_weights = ga$POP)
 ```
 
-```{r, fig4, fig.height=5, fig.width=5}
+```{r, fig4, fig.height=5, fig.width=8.5}
 if(require(ggplot2)){
   gacnty |>
     ggplot2::ggplot() +
       ggplot2::geom_sf(aes(fill = avg_prox), color=NA) +
-      ggplot2::scale_fill_distiller(palette = "Spectral") +
+      ggplot2::scale_fill_distiller(palette = "Spectral",
+                                    name = "Proximity") +
       ggplot2::labs(title = 'Population-Weighted Average Proximity to Superfund Sites by County', 
                     subtitle = 'Georgia, 2025') +
       ggplot2::theme_minimal()
