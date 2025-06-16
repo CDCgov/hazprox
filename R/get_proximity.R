@@ -34,15 +34,21 @@ get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
 
   #Verify length weights matches points (if provided)
   if(missing(weights)) {
-    weights =  rep(1, nrow(to))
+    weights =  rep(1, length(sf::st_geometry(to)))
   }
 
-  if(length(weights) != nrow(to))
+  if(length(weights) != length(sf::st_geometry(to)))
     stop("`to` and `weights` must have the same length")
 
   #Verify `from` input is a spatial polygon
-  if(!inherits(from, c("sf", "sfc")) || !any(sf::st_geometry_type(from) %in% c("POLYGON", "MULTIPOLYGON"))){
+  if(!(inherits(from, c("sf", "sfc")) &&
+        all(sf::st_geometry_type(from) %in% c("POLYGON", "MULTIPOLYGON")))){
     stop('`from` must be a spatial polygon')
+  }
+
+  # Convert to sf if input is sfc
+  if (inherits(from, "sfc")) {
+    from <- sf::st_sf(geometry = from)
   }
 
   #Ensure polygon and points are sf objects with same CRS
