@@ -3,6 +3,7 @@
 #' @description Converts a numeric length value with specified units to kilometers.
 #' @param x a numeric value
 #' @param from The original units of x
+#' @return a double representing length in kilometers
 #'
 #' @source Adapted from code developed by Matthew A. Birk for the measurements package.
 #' @noRd
@@ -30,8 +31,11 @@
 	data.frame(unit = 'mi', std = 100/2.54/12/5280),
 	data.frame(unit = 'mile', std = 100/2.54/12/5280),
 	data.frame(unit = 'naut_mi', std = 1/1852),
+	data.frame(unit = 'nautical mile', std = 1/1852),
+	data.frame(unit = 'nautical mi', std = 1/1852),
 	data.frame(unit = 'au', std = 1/149597870700),
 	data.frame(unit = 'AU', std = 1/149597870700),
+	data.frame(unit = 'light year', std = 1/9460730472580800),
 	data.frame(unit = 'light_yr', std = 1/9460730472580800),
 	data.frame(unit = 'light_year', std = 1/9460730472580800),
 	data.frame(unit = 'parsec', std = 1/149597870700/(6.48e5/pi)),
@@ -40,6 +44,7 @@
 
 to_km = function(x, from){
 	unit = std = NULL
+	from = tolower(from)
 	if(nrow(subset(.conversions,unit==from))==0) stop('the \'from\' argument is not an acceptable unit.')
 	value = x / subset(.conversions, unit == from, std, drop = TRUE)
 	return(value * 0.001)
