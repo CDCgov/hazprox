@@ -1,22 +1,27 @@
-#' @title get_proximity
+#' @title Calculate cumulative proximity to features for geographic areas
 #'
 #' @description
-#' Calculate the cumulative proximity to environmental hazards for geographic areas.
-#' The function calculates the sum of inverse distances between the geometric center
-#' of the area and all hazards within a specified tolerance. Proximity calculations
-#' for areas that do not have any hazards within the specified tolerance only consider the single
-#' nearest distance. A vector of weights may be applied to each hazard so that
-#' some hazards contribute more to the cumulative proximity score.
+#' This function calculates the sum of inverse distances between the geometric center
+#' of the `from` area and all `to` features within a specified tolerance.
 
-#' @param from An spatial polygon layer with class sf or sfc. Proximity
-#' statistics will be calculated for each polygon in this layer.
-#' @param to A spatial polygon, point, or linestring layer with class sf or sfc
-#' representing the environmental hazard(s) of interest.
-#' @param tolerance The maximum search distance for environmental hazards (optional).
+#' @param from polygon or multipolygon object with class sf or sfc.
+#' @param to object of any geometry type (point, polygon, linestring, geometry collection) with class sf or sfc.
+#' @param tolerance The maximum search distance for `to` features (optional).
 #' @param units The units of the tolerance value (e.g., "m", "km", "ft", "yd", "fathom", "mi", "naut_mi", "au"),
-#' if tolerance is specified.
-#' @param weights An optional vector with the same length as to that applies a weight to each hazard.
+#' if tolerance is specified. Ignored if tolerance is omitted.
+#' @param weights An optional numeric vector with the same length as `to` that applies a weight to each `to` feature.
 #'
+#' @details
+#' get_proximity calculates proximity statistics for each polygon in  `from` based on the cumulative inverse distance
+#' to each feature in `to`, typically representing environmental hazard(s) of interest or concern. If a tolerance value
+#' is provided, only hazards within the tolerance distance will be included in proximity calculations. For polygons that
+#' do not have any hazards within the specified tolerance, proximity will only consider the single nearest distance.
+#'
+#' Users may also weight the proximity calculations based on the expected risk or severity of each hazard in `to` by
+#' providing a vector of weights corresponding to each hazard.
+#'
+#' @returns
+#' A numeric vector with the same length as `from`.
 #'
 #' @importFrom rlang .data
 #'
@@ -30,6 +35,7 @@
 #' plot(ga['Proximity'])
 #' #calculate proximity to superfund sites within 10 miles of tract boundary
 #' p10 <- get_proximity(from=ga, to=npls, tolerance = 10, units = 'mi', weights = w)
+#'
 get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
 
   #Verify length weights matches points (if provided)
