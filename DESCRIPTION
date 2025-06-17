@@ -1,6 +1,7 @@
 Package: hazprox
 Title: Population-Weighted Average Proximity to Hazards 
 Version: 0.0.0.9000
+Date: 2025-06-17
 Authors@R: 
     person("Sarah", "Rockhill", 
             email="ppk8@cdc.gov", 

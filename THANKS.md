@@ -7,16 +7,15 @@ The hazprox package is a collaboration between the Agency for Toxic Substances a
   Geospatial Research, Analysis, and Services Program
   Office of Innovation & Analytics (OIA)
   Agency for Toxic Substances and Disease Registry (ATSDR)
-  alavery@cdc.gov
   
-* Frank C. Curriero, PhD
-  Geospatial Consultant
-  Geospatial Research, Analysis, and Services Program
-  Office of Innovation & Analytics (OIA)
-  Agency for Toxic Substances and Disease Registry (ATSDR)
+* Frank C. Curriero, PhD  
+  Geospatial Consultant 
+  Geospatial Research, Analysis, and Services Program 
+  Office of Innovation & Analytics (OIA)  
+  Agency for Toxic Substances and Disease Registry (ATSDR)  
 
-* Johnni Daniel, MPH, DHSc
-  Epidemiologist
-  Division of Environmental Health Science and Practice
-  National Center for Environmental Health
-  Centers for Disease Control and Prevention
+* Johnni Daniel, MPH, DHSc  
+  Epidemiologist  
+  Division of Environmental Health Science and Practice 
+  National Center for Environmental Health  
+  Centers for Disease Control and Prevention  
