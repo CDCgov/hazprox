@@ -1,0 +1,23 @@
+# Thanks and Acknowledgements
+
+The hazprox package is a collaboration between the Agency for Toxic Substances and Disease Registry (ATSDR) Geospatial Research, Analysis, and Services Program (GRASP) and the Centers for Disease Control and Prevention (CDC) Division of Environmental Health Science and Practice (DEHSP). The following individuals provided scientific expertise, guidance, and review of package materials:
+
+* Amy Lavery, PhD   
+  Lead, Geospatial Epidemiology and Applied Research 
+  Geospatial Research, Analysis, and Services Program
+  Office of Innovation & Analytics (OIA)
+  Agency for Toxic Substances and Disease Registry (ATSDR)
+  alavery@cdc.gov
+  
+* Frank C. Curriero, PhD
+  Geospatial Consultant
+  Geospatial Research, Analysis, and Services Program
+  Office of Innovation & Analytics (OIA)
+  Agency for Toxic Substances and Disease Registry (ATSDR)
+
+* Johnni Daniel, MPH, DHSc
+  Epidemiologist
+  Division of Environmental Health Science and Practice
+  National Center for Environmental Health
+  Centers for Disease Control and Prevention
+
