@@ -11,7 +11,8 @@ The mission of GRASP is to provide leadership and expertise in the application o
 # hazprox
 
 **General disclaimer** This repository was created for use by CDC programs to collaborate 
-on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/organization/mission.htm).  
+on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/cdc/index.html). 
+
 GitHub is not hosted by the CDC, but is a third party website used by CDC and its partners 
 to share information and collaborate on software. CDC use of GitHub does not imply an 
 endorsement of any one particular service, product, or enterprise. 
