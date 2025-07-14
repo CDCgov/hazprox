@@ -10,12 +10,18 @@ The mission of GRASP is to provide leadership and expertise in the application o
 
 # hazprox
 
-**General disclaimer** This repository was created for use by CDC programs to collaborate 
-on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/cdc/index.html). 
+<!-- badges: start -->
+![](https://img.shields.io/badge/r-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
 
+
+_**General disclaimer**_ *This repository was created for use by CDC programs to collaborate 
+on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/cdc/index.html). 
 GitHub is not hosted by the CDC, but is a third party website used by CDC and its partners 
 to share information and collaborate on software. CDC use of GitHub does not imply an 
-endorsement of any one particular service, product, or enterprise. 
+endorsement of any one particular service, product, or enterprise.* 
 
 ## Overview
 
@@ -24,7 +30,7 @@ The hazprox package can be used to support exploratory analysis of environmental
 This tool is based on the Superfund Proximity measurement described in the 
 Environmental Protection Agency [EJScreen Tool Technical Documentation](https://www.epa.gov/system/files/documents/2024-07/ejscreen-tech-doc-version-2-3.pdf). 
 
-**If you have questions about this project or need assistance, email ppk8@cdc.gov**
+If you have questions about this project or need assistance, email [ppk8@cdc.gov](mailto:ppk8@cdc.gov).
 
 ## Installation
 
@@ -37,11 +43,11 @@ install_github('cdcgov/hazprox')
 
 ## Usage
 
-`hazprox` calculates cumulative proximity  between simple feature (sf) geospatial objects 
+hazprox allows users to calculate cumulative proximity between simple feature (sf) geospatial objects 
 (e.g., POINT, LINESTRING, POLYGON, MULTI*). Statistics are calculated for geographic areas,
-represented by polygons, based on the inverse distance to other sf objects. `hazprox` comes
-bundled with several example datasets including census tracts, fire locations, and Superfund
-sites in the state of Georgia. Basic usage of the `get_proximity` function is shown below. 
+represented by polygons, based on the inverse distance to other sf objects. The hazprox package
+comes bundled with several example datasets including census tracts, fire locations, and Superfund
+sites in the state of Georgia. Basic usage of the `get_proximity()` function is shown below. 
 More details on `hazprox` functions and datasets are available in the package documentation.  
 
 ```r
