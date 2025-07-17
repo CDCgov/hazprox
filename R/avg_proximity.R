@@ -25,29 +25,29 @@
 #' counties_wt <- avg_proximity(ga, npls,  group='County', pop_weights = ga$POP)
 #'
 #' @export
-avg_proximity <- function(from, to, ...,  group, pop_weights=NULL) {
+avg_proximity <- function(from, to, ...,  group, pop_weights = NULL) {
 
   #Verify that weights are provided for each unit, if any
-  if(!is.null(pop_weights) && nrow(from) != length(pop_weights)) {
-    stop('Error: `from` and `pop_weights` must have same length.')
+  if (!is.null(pop_weights) && nrow(from) != length(pop_weights)) {
+    stop("Error: `from` and `pop_weights` must have same length.")
   }
 
   #Calculate proximity for each unit of from_poly
   from$unit_prox <- get_proximity(from, to, ...)
 
   #Calculated weighted average, ignore missing values
-  if(!is.null(pop_weights)) {
+  if (!is.null(pop_weights)) {
     result <- from |>
       cbind(pop_weights = pop_weights) |>
       dplyr::group_by(!!!rlang::syms(group)) |>
-      dplyr::summarise(avg_prox = sum(.data$pop_weights  * .data$unit_prox, na.rm=T) /
-                         sum(.data$pop_weights, na.rm=T))
+      dplyr::summarise(avg_prox = sum(.data$pop_weights  * .data$unit_prox, na.rm = TRUE) /
+                         sum(.data$pop_weights, na.rm = TRUE))
   }
 
-  if(is.null(pop_weights)) {
-     result <- from|>
+  if (is.null(pop_weights)) {
+    result <- from |>
       dplyr::group_by(!!!rlang::syms(group)) |>
-      dplyr::summarise(avg_prox = mean(.data$unit_prox, na.rm=T))
+      dplyr::summarise(avg_prox = mean(.data$unit_prox, na.rm = TRUE))
   }
 
   return(result)

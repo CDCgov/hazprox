@@ -47,25 +47,25 @@ The `hazprox` package also includes a dataset with information about 16,195 fire
 
 ```{r}
 #Import fires dataset
-fname <- system.file("extdata/ga_fires.csv", package="hazprox")
-ga_fires <- read.csv(fname) 
+fname <- system.file("extdata/ga_fires.csv", package = "hazprox")
+ga_fires <- read.csv(fname)
 
 #View first 5 records in the Georgia fires dataset
 ga_fires |>
-  select(Event, CauseType, Acres, Owner, Lat, Lon) |> 
+  select(Event, CauseType, Acres, Owner, Lat, Lon) |>
   slice(1:5)
 ```
 
 Each record in the `ga_fires` dataset includes latitude (Lat) and longitude (Lon) coordinates representing the location for each fire origin. We will need to convert these records into spatial points before calculating proximity. You can use the `help()` function to view metadata for datasets bundled with hazprox. The metadata includes important information about each dataset including its source, field descriptions, and any processing steps that were performed during dataset preparation.  
 
 ```{r, eval=FALSE}
-help('ga_fires')
+help("ga_fires")
 ```
 
 The `ga_fires` documentation indicates that the geographic coordinates are in North American Datum of 1983 (NAD 83). We can use the sf library to convert these data to a points simple feature.  
 
 ```{r}
-fires_sf <- st_as_sf(ga_fires, coords = c('Lon', 'Lat'), crs = 4269)
+fires_sf <- st_as_sf(ga_fires, coords = c("Lon", "Lat"), crs = 4269)
 ```
 
 ## Prepare data for analysis
@@ -84,7 +84,7 @@ summary(fires_sf$Acres)
 The number of acres burned shows a highly right-skewed distribution. Most fires burn fewer than seven acres of land; however, the largest fire burned over 400 acres. For this analysis, we will exclude fires less than one acre and create a weight for the number of acres burned. Due to the skewed distribution, we will log-transform acres. 
 
 ```{r}
-fires_sf <- fires_sf |> 
+fires_sf <- fires_sf |>
   filter(Acres >= 1) |>
   mutate(severity  = log(Acres))
 ```
@@ -97,10 +97,10 @@ Let's take a look at our where fires are located throughout Georgia. We will use
 fires_sf |>
   arrange(severity) |>
   ggplot() +
-  geom_sf(data=ga, color='gray', fill='white') +
-  geom_sf(aes(size = severity, color=severity), alpha = 0.3) +
+  geom_sf(data = ga, color = "gray", fill = "white") +
+  geom_sf(aes(size = severity, color = severity), alpha = 0.3) +
   scale_color_distiller(palette = "Spectral") +
-  labs(title = 'Fires (1+ Acres) Occuring in Georgia, 2019')+
+  labs(title = "Fires (1+ Acres) Occuring in Georgia, 2019") +
   theme_minimal()
 ```
 
@@ -131,7 +131,7 @@ Now let's examine some descriptive statistics of the Proximity field.
 
 ```{r, fig.dim = c(4, 3)}
 ggplot(ga, aes(Proximity)) +
-  geom_histogram(fill = 'navy', color = 'white')
+  geom_histogram(fill = "navy", color = "white")
 ```
 
 Most tracts have relatively low proximity. The median score is `r round(median(ga$Proximity), 3)` However, a few tracts have very high proximity scores. 
@@ -142,11 +142,11 @@ We can use `ggplot2` to visualize the geographic distribution of census tracts a
 
 ```{r, fig.dim = c(6, 5)}
 ga |>
-  ggplot(aes(fill=Proximity)) +
-  geom_sf(color=NA) +
+  ggplot(aes(fill = Proximity)) +
+  geom_sf(color = NA) +
   scale_fill_distiller(palette = "Spectral") +
-  labs(title = 'Census Tract Proximity to Fires Burning 1+ Acre', 
-       subtitle = 'Georgia, 2019')+
+  labs(title = "Census Tract Proximity to Fires Burning 1+ Acre",
+       subtitle = "Georgia, 2019") +
   theme_minimal()
 ```
 

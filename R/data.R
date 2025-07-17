@@ -68,7 +68,8 @@
 #'   \item{SITE_ID}{Unique identifier for site for Superfunds with multiple sites}
 #'   \item{STREET}{Street address of Superfund location}
 #'   \item{ADDR_C}{Additional address information for Superfund location, if any}
-#'   \item{CITY}{City/town/village/municipality of Superfund location or nearest place name if site is not within a formal jurisdiction.}
+#'   \item{CITY}{City/town/village/municipality of Superfund location or nearest place name if site is not within a
+#'   formal jurisdiction.}
 #'   \item{COUNTY}{County of Superfund location}
 #'   \item{STATE}{State of Superfund location}
 #'   \item{ZIP}{5-digit zip code of Superfund location}
@@ -95,8 +96,8 @@
 #' available for use under Creative Commons Attribution v4.0 License.
 #'
 #' @references
-#' Short, Karen C. 2022. Spatial wildfire occurrence data for the United States, 1992-2020 (FPA_FOD_20221014). 6th Edition.
-#' Fort Collins, CO: Forest Service Research Data Archive. https://doi.org/10.2737/RDS-2013-0009.6
+#' Short, Karen C. 2022. Spatial wildfire occurrence data for the United States, 1992-2020 (FPA_FOD_20221014).
+#' 6th Edition. Fort Collins, CO: Forest Service Research Data Archive. https://doi.org/10.2737/RDS-2013-0009.6
 #'
 #'
 #' @format ## `ga_fires`
@@ -115,11 +116,11 @@
 #'   \item{Lon}{Longitude (NAD83) for point location of the fire (decimal degrees)}
 #'   ...
 #' }
-#' @source \url{https://catalog.data.gov/dataset/national-interagency-fire-occurrence-sixth-edition-1992-2020-feature-layer}
+#'
+#' @source \url{https://catalog.data.gov/dataset/national-interagency-fire-occurrence-sixth-edition-1992-2020-feature-layer} #nolint
 #' @source \url{https://www.fs.usda.gov/rds/archive/catalog/RDS-2013-0009.6}
 #'
 #' @seealso
 #' The script used to create the ga_fires dataset: \url{https://github.com/cdcent/hazprox/blob/main/data-raw/ga-fires.R}
 #'
 "ga_fires"
-

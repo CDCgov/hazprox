@@ -54,9 +54,9 @@ npls |> select(NAME, CITY, geometry) |> slice(1:5)
 ```
 
 ```{r fig1, fig.height=5, fig.width= 7}
-plot(st_geometry(ga), col='darkgray', border = NA)
-plot(npls$geometry, col='red', cex=1, pch=8, add=T)
-title(main="National Priority List Sites Located in Georgia")
+plot(st_geometry(ga), col = "darkgray", border = NA)
+plot(npls$geometry, col = "red", cex = 1, pch = 8, add = TRUE)
+title(main = "National Priority List Sites Located in Georgia")
 ```
 
 National Priority List sites are located throughout Georgia, but appear to be tightly clustered together in a few regions. 
@@ -93,11 +93,11 @@ ga$County <- substr(ga$GEOID, 1, 5)
 For this example, we will consider all National Priority List sites within 15 miles of each census tract boundary. We will also request that the function return a population-weighted average for each county, using the POP field. Results are returned in a new sf object aggregated to the group level. Average proximity is stored in the avg_prox field. 
 
 ```{r}
-gacnty <- avg_proximity(from = ga, 
-                        to = npls, 
-                        tolerance = 15, 
-                        units = 'mi', 
-                        group='County',  
+gacnty <- avg_proximity(from = ga,
+                        to = npls,
+                        tolerance = 15,
+                        units = "mi",
+                        group = "County",
                         pop_weights = ga$POP)
 
 summary(gacnty$avg_prox)
@@ -106,14 +106,13 @@ summary(gacnty$avg_prox)
 ## Map results
 
 ```{r, fig4, fig.height=5, fig.width=8.5, warning=FALSE}
-if(require(ggplot2)){
+if (require(ggplot2)) {
   gacnty |>
     ggplot() +
-      geom_sf(aes(fill = avg_prox), color=NA) +
-      scale_fill_distiller(palette = "Spectral",
-                                    name = "Proximity") +
-      labs(title = 'Population-Weighted Average Proximity to Superfund Sites by County', 
-                    subtitle = 'Georgia, 2025') +
-      theme_minimal()
+    geom_sf(aes(fill = avg_prox), color = NA) +
+    scale_fill_distiller(palette = "Spectral", name = "Proximity") +
+    labs(title = "Population-Weighted Average Proximity to Superfund Sites by County",
+         subtitle = "Georgia, 2025") +
+    theme_minimal()
 }
 ```

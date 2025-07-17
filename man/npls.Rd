@@ -14,7 +14,8 @@ A data frame with 17 rows and 13 columns:
 \item{SITE_ID}{Unique identifier for site for Superfunds with multiple sites}
 \item{STREET}{Street address of Superfund location}
 \item{ADDR_C}{Additional address information for Superfund location, if any}
-\item{CITY}{City/town/village/municipality of Superfund location or nearest place name if site is not within a formal jurisdiction.}
+\item{CITY}{City/town/village/municipality of Superfund location or nearest place name if site is not within a
+formal jurisdiction.}
 \item{COUNTY}{County of Superfund location}
 \item{STATE}{State of Superfund location}
 \item{ZIP}{5-digit zip code of Superfund location}

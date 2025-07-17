@@ -23,12 +23,12 @@
 #'
 #'
 #' @export
-sync_projection<-function(df1, df2){
+sync_projection <- function(df1, df2) {
 
   #Check that inputs are both simple feature objects
   stopifnot("Inputs must be an sf, sfc, or sfg object" =
-              inherits(df1, c('sf', 'sfc', 'sfg')) &&
-              inherits(df2, c('sf', 'sfc', 'sfg')))
+              inherits(df1, c("sf", "sfc", "sfg")) &&
+              inherits(df2, c("sf", "sfc", "sfg")))
 
   #Verify that both objects have a coordinate reference system
   stopifnot("Inputs must have a CRS" =
@@ -41,32 +41,27 @@ sync_projection<-function(df1, df2){
   #Check if inputs in geographic CRS
   if (sf::st_is_longlat(df1) && sf::st_is_longlat(df2)) {
     stop("The inputs do not have a projected CRS.\n")
-  }
+  } else
 
-  #Check if inputs projected in the same CRS
-  else if (!sf::st_is_longlat(df1) && !sf::st_is_longlat(df2) &&
-           sf::st_crs(df1)!=sf::st_crs(df2)) {
-    stop("Inputs have different projections. Transform data before proceeding.\n")
-  }
+    #Check if inputs projected in the same CRS
+    if (!sf::st_is_longlat(df1) && !sf::st_is_longlat(df2) &&
+          sf::st_crs(df1) != sf::st_crs(df2)) {
+      stop("Inputs have different projections. Transform data before proceeding.\n")
+    } else
 
-  #if a single input is projected, project other input in same CRS
-  else if (!sf::st_is_longlat(df1) && sf::st_is_longlat(df2)) {
-    message(glue("{df2_name} does not have a projected CRS.
+      #if a single input is projected, project other input in same CRS
+      if (!sf::st_is_longlat(df1) && sf::st_is_longlat(df2)) {
+        message(glue("{df2_name} does not have a projected CRS.
                  Projecting {df2_name} into ({sf::st_crs(df1)$proj4string}).\n"))
-    df2 <- df2 |> sf::st_transform(crs=sf::st_crs(df1))
-  }
+        df2 <- df2 |> sf::st_transform(crs = sf::st_crs(df1))
+      } else
 
-  #if a single input is projected, project other input in same CRS
-  else if (sf::st_is_longlat(df1) && !sf::st_is_longlat(df2)) {
-    message(glue("{df1_name} does not have a projected CRS.
+        #if a single input is projected, project other input in same CRS
+        if (sf::st_is_longlat(df1) && !sf::st_is_longlat(df2)) {
+          message(glue("{df1_name} does not have a projected CRS.
                  Projecting {df1_name} into ({sf::st_crs(df2)$proj4string}).\n"))
-    df1 <- df1 |> sf::st_transform(crs=sf::st_crs(df2))
-  }
+          df1 <- df1 |> sf::st_transform(crs = sf::st_crs(df2))
+        }
 
-  #else {
-  #  message("Data are projected in same CRS.")
-
-  #}
-
-  return(list(df1 = df1, df2 = df2))
+  list(df1 = df1, df2 = df2)
 }

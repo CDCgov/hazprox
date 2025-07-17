@@ -10,14 +10,14 @@
 # [FPA_FOD_20221014]. 6th Edition. Fort Collins, CO: Forest Service Research Data Archive.
 # https://doi.org/10.2737/RDS-2013-0009.6
 #
-# See https://catalog.data.gov/dataset/national-interagency-fire-occurrence-sixth-edition-1992-2020-feature-layer/resource/184a26f3-ba25-47f8-8788-505e647edea8
+# See https://catalog.data.gov/dataset/national-interagency-fire-occurrence-sixth-edition-1992-2020-feature-layer/resource/184a26f3-ba25-47f8-8788-505e647edea8 #nolint
 #-------------------------------------------------------------------------------
-library('sf')
-library('dplyr')
+library("sf")
+library("dplyr")
 
 #Import data from data.gov repository
 
-url<-'https://data-usfs.hub.arcgis.com/api/download/v1/items/1f4a85fa0cc749fcabc35672f94cf410/csv?layers=29'
+url <- "https://data-usfs.hub.arcgis.com/api/download/v1/items/1f4a85fa0cc749fcabc35672f94cf410/csv?layers=29"
 
 file_name <- "National Interagency Fire Occurrence Sixth Edition 1992-2020 (Feature Layer).csv"
 file_path <- "C://Users//ppk8//Downloads//"
@@ -26,21 +26,21 @@ download.file(url = url, destfile = paste0(file_path, file_name, sep = ""))
 fires <- read.csv(file = paste0(file_path, file_name))
 
 #Select fires occurring in Georgia from 2011 through 2020
-ga_fires <- fires |> filter(STATE == 'GA' & FIRE_YEAR > 2015)
+ga_fires <- fires |> filter(STATE == "GA" & FIRE_YEAR > 2015)
 
 #Select variables for analysis
 ga_fires <- ga_fires |>
   select(Id = FOD_ID, #UNIQUE ID
-         Name = FIRE_NAME, # NAME OF INCIDENT
-         Year= FIRE_YEAR, # YEAR OF DISCOVERY
-         Date = DISCOVERY_DATE, # DATE OF DISCOVERY
-         CauseType = NWCG_CAUSE_CLASSIFICATION, # Reason the fire occurred (Human, Natural, Missing, Unknown).
-         Event = NWCG_GENERAL_CAUSE, #Event or circumstance that started or led to fire
-         ControlDate = CONT_DATE, #Date fire was controlled
-         Acres = FIRE_SIZE, #Estimate of total area burned
-         Owner = OWNER_DESCR, #Agency responsible for responding at origin
-         Lat = LATITUDE,
-         Lon = LONGITUDE
+    Name = FIRE_NAME, # NAME OF INCIDENT
+    Year = FIRE_YEAR, # YEAR OF DISCOVERY
+    Date = DISCOVERY_DATE, # DATE OF DISCOVERY
+    CauseType = NWCG_CAUSE_CLASSIFICATION, # Reason the fire occurred (Human, Natural, Missing, Unknown).
+    Event = NWCG_GENERAL_CAUSE, #Event or circumstance that started or led to fire
+    ControlDate = CONT_DATE, #Date fire was controlled
+    Acres = FIRE_SIZE, #Estimate of total area burned
+    Owner = OWNER_DESCR, #Agency responsible for responding at origin
+    Lat = LATITUDE,
+    Lon = LONGITUDE
   )
 
 #--------------------------------------------------------------------------------------
@@ -51,4 +51,3 @@ usethis::use_data(ga_fires, overwrite = TRUE)
 #save a raw dataset in external data folder for illustrating data preparation
 #in vignettes.
 write.csv(ga_fires, "inst/extdata/ga_fires.csv", row.names = FALSE)
-

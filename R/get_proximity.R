@@ -36,20 +36,20 @@
 #' #calculate proximity to superfund sites within 10 miles of tract boundary
 #' p10 <- get_proximity(from=ga, to=npls, tolerance = 10, units = 'mi', weights = w)
 #'
-get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
+get_proximity <- function(from, to, tolerance = NULL, units = "km", weights = NULL) {
 
   #Verify length weights matches points (if provided)
-  if(missing(weights)) {
-    weights =  rep(1, length(sf::st_geometry(to)))
+  if (missing(weights)) {
+    weights <-  rep(1, length(sf::st_geometry(to)))
   }
 
-  if(length(weights) != length(sf::st_geometry(to)))
+  if (length(weights) != length(sf::st_geometry(to)))
     stop("`to` and `weights` must have the same length")
 
   #Verify `from` input is a spatial polygon
-  if(!(inherits(from, c("sf", "sfc")) &&
-        all(sf::st_geometry_type(from) %in% c("POLYGON", "MULTIPOLYGON")))){
-    stop('`from` must be a spatial polygon')
+  if (!(inherits(from, c("sf", "sfc")) &&
+          all(sf::st_geometry_type(from) %in% c("POLYGON", "MULTIPOLYGON")))) {
+    stop("`from` must be a spatial polygon")
   }
 
   # Convert to sf if input is sfc
@@ -65,25 +65,26 @@ get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
   #Calculate block area in square kilometers
   from <- from |>
     dplyr::mutate(st_areashape =
-                    units::set_units(sf::st_area(from),"km^2")
-                  )
+        units::set_units(sf::st_area(from), "km^2")
+    )
 
   #Calculate block area equivalent radius
-  from <- from |> dplyr::mutate(baeqRad = (.data$st_areashape/pi)^(1/2))
+  from <- from |> dplyr::mutate(baeqRad = (.data$st_areashape / pi) ^ (1 / 2))
 
   #Calculate midpoint coordinates for each polygon
   suppressWarnings(
-    from_centers<-from |> sf::st_centroid()
+    from_centers <- from |> sf::st_centroid()
   )
 
   #Set maximum search distance in km
   tol_km <- units::set_units(
-            if (is.null(tolerance)) 1e5 else as.numeric(to_km(tolerance, from = units)),
-            'km')
+                             if (is.null(tolerance)) 1e5
+                             else as.numeric(to_km(tolerance, from = units)),
+                             "km")
 
   #Calculate distance (km) matrix
   distances <- as.matrix(sf::st_distance(from_centers, to))
-  distances <- units::set_units(distances, 'km')
+  distances <- units::set_units(distances, "km")
 
   # Prepare results list
   result_list <- vector("numeric", length = nrow(from))
@@ -97,9 +98,7 @@ get_proximity<-function(from, to, tolerance=NULL, units='km', weights=NULL){
       # No points within tolerance — use minimum distance to all points
       min_idx <- which.min(dists)
       result_list[i] <- (1 / dists[min_idx]) * weights[min_idx]
-    }
-
-    else {
+    } else {
       # Calculate distances only to nearby points
       corrected <- ifelse(dists[within_tol] < from$baeqRad[i], dists[within_tol] * 0.9, dists[within_tol])
       wts <- weights[within_tol]
