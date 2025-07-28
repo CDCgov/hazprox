@@ -97,9 +97,10 @@ Let's take a look at where fires are located throughout Georgia by plotting the 
 fires_sf |>
   arrange(severity) |>
   ggplot() +
-  geom_sf(data = ga, color = "gray", fill = "white") +
-  geom_sf(aes(size = severity, color = severity), alpha = 0.3) +
-  scale_color_distiller(palette = "Spectral") +
+  geom_sf(data = ga, color = NA, fill = "gray") +
+  geom_sf(aes(size = severity, color = severity), alpha = 0.45) +
+  scale_color_distiller(palette = "Spectral", limits = c(0, 7), breaks = seq(0, 7, by = 2), guide = 'legend') +
+  scale_size_continuous(range = c(1, 8)) +
   labs(title = "Fires (1+ Acres) Occuring in Georgia, 2019") +
   theme_minimal()
 ```
