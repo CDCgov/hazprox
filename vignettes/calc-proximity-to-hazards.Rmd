@@ -91,7 +91,7 @@ fires_sf <- fires_sf |>
 
 ## Visualize fires 
 
-Let's take a look at our where fires are located throughout Georgia. We will use vary the size of the point by the number of acres burned. 
+Let's take a look at where fires are located throughout Georgia by plotting the fire coordinates on a map of Georgia. We will vary the size and color of each point by the number of acres burned to highlight the most severe fires. 
 
 ```{r, fig.dim=c(6, 5)}
 fires_sf |>
@@ -117,17 +117,17 @@ wts <- fires_sf$severity
 ga$Proximity <- get_proximity(ga, fires_sf, tolerance = 20, weights = wts)
 ```
 
-When we use the get_proximity function, we get the following warning message:
+When we use the `get_proximity function`, we get the following warning message:
 
 ```to is not in a projected CRS.
 
 Projecting to into (+proj=utm +zone=19 +ellps=GRS80 +units=m +no_defs).```
 
-This message warns us that our fires_sf are not projected. The `get_proximity` function has done us the favor of projecting the `fires_sf` into the same CRS as the `ga` layer. Note, this message does not indicate an error. The function will still work when one of the input datasets is not projected because it assumes that unprojected dataset should have the same projections at the other input. However, if neither input has a projected CRS or if they have different CRS, `get_proximity` will return an error. 
+This message warns us that our fires_sf are not projected. The `get_proximity` function has done us the favor of projecting the `fires_sf` into the same CRS as the `ga` layer. Note, this message does not indicate an error. The function will still work when one of the input datasets is not projected because it assumes that the unprojected dataset should have the same projections as the other input. However, if neither input has a projected CRS or if they have different CRS, `get_proximity` will return an error. 
 
 ## Descriptive statistics
 
-Now let's examine some descriptive statistics of the Proximity field. 
+Now let's build a histogram of the new Proximity field to examine the distribution. 
 
 ```{r, fig.dim = c(4, 3)}
 ggplot(ga, aes(Proximity)) +
