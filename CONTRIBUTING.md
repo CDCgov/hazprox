@@ -5,7 +5,7 @@ and we are looking forward to fostering an open, transparent, and collaborative 
 
 Before contributing, we encourage you to also read our [LICENSE](LICENSE) and
 [README](README.md) files, also found in this repository. If you have any questions not
-answered by the content of this repository, feel free to [contact us](mailto:ppk8@cdc.gov).
+answered by the content of this repository, feel free to [contact us](mailto:srockhill@cdc.gov).
 
 ## Public Domain
 This project is in the public domain within the United States, and copyright and

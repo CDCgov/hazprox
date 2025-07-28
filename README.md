@@ -4,7 +4,7 @@
 
 **Welcome to the Geospatial Research, Analysis, and Services Program (GRASP) Place & Health Code Hub!**
 
-The mission of GRASP is to provide leadership and expertise in the application of the concepts, methods, and tools of geography and geospatial information science to public health research and practice. Visit the [GRASP homepage](https://www.atsdr.cdc.gov/place-health/index.html) to learn more about our work. 
+GRASP leads the application of geospatial science, data, analysis, technology, and visualization at the intersection of place and health. The Program strengthens public health science and practice by examining environmental exposures, infectious and chronic disease, and the built environment. GRASP supports CDC/ATSDR in public health emergency readiness, response, and recovery by providing expertise, guidance, and support. Visit the [GRASP homepage](https://www.atsdr.cdc.gov/place-health/index.html) to learn more about our work. 
 
 ---
 
@@ -25,12 +25,12 @@ endorsement of any one particular service, product, or enterprise.*
 
 ## Overview
 
-An R package for calculating cumulative, area-based proximity for simple features. 
+An R package for calculating cumulative, area-based proximity for simple feature objects. 
 The hazprox package can be used to support exploratory analysis of environmental hazards. 
 This tool is based on the Superfund Proximity measurement described in the 
 Environmental Protection Agency [EJScreen Tool Technical Documentation](https://www.epa.gov/system/files/documents/2024-07/ejscreen-tech-doc-version-2-3.pdf). 
 
-If you have questions about this project or need assistance, email [ppk8@cdc.gov](mailto:ppk8@cdc.gov).
+If you have questions about this project or need assistance, email [srockhill@cdc.gov](mailto:srockhill@cdc.gov).
 
 ## Installation
 
