@@ -79,8 +79,7 @@ get_proximity <- function(from, to, tolerance = NULL, units = "km", weights = NU
   #Set maximum search distance in km
   tol_km <- units::set_units(
                              if (is.null(tolerance)) 1e5
-                             else as.numeric(to_km(tolerance, from = units)),
-                             "km")
+                             else to_km(tolerance, from = units), "km")
 
   #Calculate distance (km) matrix
   distances <- as.matrix(sf::st_distance(from_centers, to))

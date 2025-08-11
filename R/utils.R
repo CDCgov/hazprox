@@ -44,6 +44,9 @@
 )
 
 to_km <- function(x, from) {
+  if (inherits(x, 'units')) {
+    x <- units::drop_units(x)
+  }
   unit <- std <- NULL
   from <- tolower(from)
   if (nrow(subset(.conversions, unit == from)) == 0) stop("the \'from\' argument is not an acceptable unit.")
