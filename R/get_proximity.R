@@ -13,12 +13,17 @@
 #'
 #' @details
 #' get_proximity calculates proximity statistics for each polygon in  `from` based on the cumulative inverse distance
-#' to each feature in `to`, typically representing environmental hazard(s) of interest or concern. If a tolerance value
-#' is provided, only hazards within the tolerance distance will be included in proximity calculations. For polygons that
-#' do not have any hazards within the specified tolerance, proximity will only consider the single nearest distance.
+#' between the geometric center of `from` and each feature in `to`, typically representing environmental hazard(s)
+#' of interest or concern. If a tolerance value is provided, only hazards within the tolerance distance will be included
+#' in proximity calculations. For polygons that do not have any hazards within the specified tolerance, proximity will only
+#' consider the single nearest distance.
 #'
 #' Users may also weight the proximity calculations based on the expected risk or severity of each hazard in `to` by
 #' providing a vector of weights corresponding to each hazard.
+#'
+#' In cases where there is no distance between a polygon centroid in `from` and one or more `to` features, proximity
+#' calculations are smoothed by adding a constant (epsilon) equal to one-tenth of the minimum non-zero distance to
+#' all distances.
 #'
 #' @returns
 #' A numeric vector with the same length as `from`.
@@ -68,8 +73,9 @@ get_proximity <- function(from, to, tolerance = NULL, units = "km", weights = NU
         units::set_units(sf::st_area(from), "km^2")
     )
 
-  #Calculate block area equivalent radius
-  from <- from |> dplyr::mutate(baeqRad = (.data$st_areashape / pi) ^ (1 / 2))
+  #Calculate block area equivalent radius in km and drop units
+  from <- from |>
+    dplyr::mutate(baeqRad = units::drop_units((.data$st_areashape / pi) ^ (1 / 2)))
 
   #Calculate midpoint coordinates for each polygon
   suppressWarnings(
@@ -77,13 +83,21 @@ get_proximity <- function(from, to, tolerance = NULL, units = "km", weights = NU
   )
 
   #Set maximum search distance in km
-  tol_km <- units::set_units(
-                             if (is.null(tolerance)) 1e5
-                             else to_km(tolerance, from = units), "km")
+  tol_km <- if (is.null(tolerance)) 1e5 else to_km(tolerance, from = units)
 
   #Calculate distance (km) matrix
   distances <- as.matrix(sf::st_distance(from_centers, to))
-  distances <- units::set_units(distances, "km")
+  distance_units <- units(distances)$numerator
+  distances <- to_km(distances, from = distance_units)
+
+  #calculate epsilon value for zero distance adjustment
+  if (any(distances <= 0)) {
+    epsilon <- min(distances[distances > 0]) / 10
+  } else {
+    epsilon = 0
+  }
+
+  distances <- distances + epsilon
 
   # Prepare results list
   result_list <- vector("numeric", length = nrow(from))

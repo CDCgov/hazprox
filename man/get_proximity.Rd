@@ -27,12 +27,17 @@ of the \code{from} area and all \code{to} features within a specified tolerance.
 }
 \details{
 get_proximity calculates proximity statistics for each polygon in  \code{from} based on the cumulative inverse distance
-to each feature in \code{to}, typically representing environmental hazard(s) of interest or concern. If a tolerance value
-is provided, only hazards within the tolerance distance will be included in proximity calculations. For polygons that
-do not have any hazards within the specified tolerance, proximity will only consider the single nearest distance.
+between the geometric center of \code{from} and each feature in \code{to}, typically representing environmental hazard(s)
+of interest or concern. If a tolerance value is provided, only hazards within the tolerance distance will be included
+in proximity calculations. For polygons that do not have any hazards within the specified tolerance, proximity will only
+consider the single nearest distance.
 
 Users may also weight the proximity calculations based on the expected risk or severity of each hazard in \code{to} by
 providing a vector of weights corresponding to each hazard.
+
+In cases where there is no distance between a polygon centroid in \code{from} and one or more \code{to} features, proximity
+calculations are smoothed by adding a constant (epsilon) equal to one-tenth of the minimum non-zero distance to
+all distances.
 }
 \examples{
 set.seed(123)
