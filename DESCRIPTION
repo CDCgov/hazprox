@@ -1,14 +1,15 @@
 Package: hazprox
-Title: Population-Weighted Average Proximity to Hazards 
+Title: Calculate Cumulative Proximity to Hazards for Geographic Areas
 Version: 0.0.0.9000
-Date: 2025-06-17
+Date: 2025-08-25
 Authors@R: 
     person("Sarah", "Rockhill", 
-            email="ppk8@cdc.gov", 
+            email="srockhill@cdc.gov", 
             role = c("aut", "cre"), 
             comment = c(ORCID = "0000-0003-3197-2825"))
-Description: Calculate the average proximity to environmental hazards over
-            a specified areal unit, weighted by population. 
+Description: Calculate the cumulative proximity to environmental hazards for
+            simple feature polygons. Allows users to calculate average and 
+            population-weighted average proximity for a larger areas.
 License: Apache License (>= 2)
 Imports: 
     dplyr (>= 1.1.4),
