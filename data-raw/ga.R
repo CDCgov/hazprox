@@ -20,8 +20,8 @@ read_shape_url <- function(x) {
 
 ga <- read_shape_url("https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_13_tract_500k.zip")
 
-#Project tract polygons in the same CRS as the Superfund layer
-ga <- st_transform(ga, st_crs(hazprox::npls))
+#Project tract polygons in NAD 1983 Georgia Statewide Lambert
+ga <- st_transform(ga, crs = "ESRI:102604")
 
 #--------------------------------------------------------------------------------------
 #Merge population data to block groups
