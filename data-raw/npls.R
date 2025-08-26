@@ -28,7 +28,7 @@ state_data <- read_shape_url("https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_
 #filter the state boundary files to Georgia project
 state_temp <- state_data |>
   filter(STUSPS %in% c("GA")) |>
-  st_transform(crs = 2960) #Albers Equal Area projection
+  st_transform(crs = "ESRI:102604") #NAD 1983 Georgia Statewide Lambert
 
 #Create 5 km buffer around states
 state_buf <- st_buffer(state_temp, dist = 5000)

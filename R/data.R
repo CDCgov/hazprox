@@ -2,7 +2,7 @@
 #'
 #' A spatial polygon dataset from the U.S. Census TIGER cartographic boundary files
 #' (v2023). This dataset includes all 2020 census tracts in the state of Georgia. Data
-#' are projected in NAD83(CSRS) / UTM zone 19N.
+#' are projected in NAD 1983 Georgia Statewide Lambert.
 #'
 #' The dataset also includes a field containing total population counts from
 #' 2023 American Community Survey (ACS) 5-Year Estimates.
@@ -30,8 +30,8 @@
 #'
 #' A spatial points data frame containing National Priority List (otherwise known
 #' as Superfund) sites in the state of Georgia or within 5 km of the state
-#' boundary. Data are projected in NAD83(CSRS) / UTM zone 19N. Data were queried
-#' from the EPA Envirofacts API on January 9, 2025.
+#' boundary. Data are projected in NAD 1983 Georgia Statewide Lambert. Data were queried
+#' from the EPA Envirofacts API on August 26, 2025.
 #'
 #' @format ## `npls`
 #' A data frame with 17 rows and 13 columns:
