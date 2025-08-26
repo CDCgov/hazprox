@@ -29,7 +29,7 @@ ga
 \description{
 A spatial polygon dataset from the U.S. Census TIGER cartographic boundary files
 (v2023). This dataset includes all 2020 census tracts in the state of Georgia. Data
-are projected in NAD83(CSRS) / UTM zone 19N.
+are projected in NAD 1983 Georgia Statewide Lambert.
 }
 \details{
 The dataset also includes a field containing total population counts from

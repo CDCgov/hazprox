@@ -25,13 +25,15 @@ knitr::opts_chunk$set(
 This vignette describes how the `get_proximity()` function can be used to calculate cumulative proximity to select features for a geographic area, such as a county, census tract, or neighborhood. The `get_proximity()` function returns a vector of numeric values representing cumulative proximity, or how close a community is to the features of interest. 
 
 Cumulative proximity:
-- may be used to describe potential population-level exposure risk to environmental hazards
+
+- describes how near an area is to all features of interest, with higher values indicating that an area is overall nearer to features than areas with lower proximity values
 - is calculated by summing the inverse distances between the geometric center of each area and all features within a given search distance
+- may be used to describe potential population-level exposure risk to environmental hazards
 - may be weighted based on the importance of each feature
 
 ## View hazprox datasets
 
-In this example, we will calculate and analyze the cumulative proximity to fires occurring in 2019 for census tracts in the state of Georgia. A simple feature dataset representing all 2020 census tracts in the State of Georgia is LazyLoaded with `hazprox` and can be accessed directly as shown below. Let's inspect our census tract dataset, `ga` by viewing the first five records. The Georgia census tracts are provided as a projected sf MULTIPOLYGON object, meaning that we can perform geospatial analysis of these data directly. 
+In this example, we will calculate and analyze the cumulative proximity to fires occurring in 2019 for census tracts in the state of Georgia. A simple feature dataset representing all 2020 census tracts in the State of Georgia is LazyLoaded with `hazprox` and can be accessed directly as shown below. The Georgia census tracts, `ga` are provided as a sf MULTIPOLYGON object, allowing us to perform geospatial analysis of these data directly. Viewing the `ga` header reveals that the census tracts are projected in NAD 1983 Georgia Statewide Lambert.
 
 ```{r setup, message = FALSE, warning=FALSE}
 library(hazprox)
@@ -43,7 +45,7 @@ library(ggplot2)
 ga |> slice(1:5)
 ```
 
-The `hazprox` package also includes a dataset with information about 16,195 fires occurring in the state of Georgia from 2016 through 2020. The fires dataset is derived from the National Interagency Fire Occurrence 6th Edition (1992-2020) dataset. These data are bundled with the `hazprox` package as a comma separated values file (`ga_fires.csv`) to demonstrate how to transform latitudinal and longitudinal coordinates for analysis. 
+The `hazprox` package also includes a dataset with information on 16,195 fires occurring in the state of Georgia from 2016 through 2020. The fires dataset is derived from the National Interagency Fire Occurrence 6th Edition (1992-2020) dataset. These data are bundled with the `hazprox` package as a comma separated values file (`ga_fires.csv`) to demonstrate how to transform latitudinal and longitudinal coordinates for analysis. 
 
 ```{r}
 #Import fires dataset
@@ -56,7 +58,7 @@ ga_fires |>
   slice(1:5)
 ```
 
-Each record in the `ga_fires` dataset includes latitude (Lat) and longitude (Lon) coordinates representing the location for each fire origin. We will need to convert these records into spatial points before calculating proximity. You can use the `help()` function to view metadata for datasets bundled with hazprox. The metadata includes important information about each dataset including its source, field descriptions, and any processing steps that were performed during dataset preparation.  
+Each record in the `ga_fires` dataset includes latitude (Lat) and longitude (Lon) coordinates representing the location for each fire origin. We will need to convert these records into spatial points before calculating proximity. You can use the `help()` function to view metadata for datasets bundled with hazprox. The metadata includes important information about each dataset including its source, field descriptions, and processing steps that were performed during dataset preparation.  
 
 ```{r, eval=FALSE}
 help("ga_fires")
