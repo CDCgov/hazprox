@@ -26,7 +26,8 @@ endorsement of any one particular service, product, or enterprise.*
 ## Overview
 
 An R package for calculating cumulative, area-based proximity for simple feature objects. 
-The hazprox package can be used to support exploratory analysis of environmental hazards. 
+The hazprox package can be used to quantify how close a geographic area is to other features of 
+interest and is intended to support exploratory analysis of environmental hazards. 
 This tool is based on the Superfund Proximity measurement described in the 
 Environmental Protection Agency [EJScreen Tool Technical Documentation](https://www.epa.gov/system/files/documents/2024-07/ejscreen-tech-doc-version-2-3.pdf). 
 
@@ -39,6 +40,13 @@ Install the development version of hazprox from GitHub:
 ```r
 library(remotes)
 install_github('cdcgov/hazprox')
+```
+
+To install and view available vignettes, specify, `build_vignettes = TRUE` in your install statement:
+
+```r
+install_github('cdcgov/hazprox', build_vignettes = TRUE)
+browseVignettes(package = 'hazprox')
 ```
 
 ## Usage
