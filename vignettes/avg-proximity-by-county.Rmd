@@ -1,5 +1,5 @@
 ---
-title: "Calculate population-weighted average proximity"
+title: "Vignette 2: Calculate Population-Weighted Average Proximity for Larger Areas"
 output:
   html_document:
     toc: true
@@ -20,68 +20,73 @@ knitr::opts_chunk$set(
 )
 ```
 
+**Note: this vignette builds on concepts introduced in the "Vignette 1: Calculate Cumulative Proximity for Geographic Areas" vignette. It may be helpful to familiarize yourself with the Vignette 1 before proceeding.** 
+
 ## Introduction
 
-In some cases, users may be interested in the average proximity to environmental hazards for a larger administrative area, such as a county or state. For example, a health agency may want to amplify messaging about air quality in counties where people tend to live closest to forest fires or increase screenings for certain cancers in counties where people tend to live closer to pollution sources. This vignette describes how to use the `avg_proximity()` function to calculate the population-weighted average proximity for larger geographic areas. In this vignette, we will find the population-weighted average proximity to environmental hazards for each county in Georgia.
+In some cases, users may be interested in the average proximity to environmental hazards for a larger administrative area, such as a county or state. For example, a health agency may want to amplify messaging about air quality in counties where people tend to live closer to sources of air pollution or enhance emergency planning in counties where people tend to live closer to factories that store toxic chemicals. The `avg_proximity` function expands upon the `get_proximity` function by allowing users to calculate average and population-weighted average proximity values for larger administrative areas.
+
+In this vignette, we will find the population-weighted average proximity to environmental hazards for each county in Georgia.
 
 ## Datasets
 
 All functions in the `hazprox` are designed to work with simple features (sf) objects. This example demonstrates a typical workflow using two sf datasets bundled with the `hazprox` package:
 
 - `ga`: 2020 census tract boundaries in the state of Georgia
-- `npls`: National Priority List (NPL) locations, otherwise known as Superfund sites. 
+- `npls`: National Priority List (NPL) locations, otherwise known as Superfund sites, within the state of Georgia. 
 
-A National Priority List site is a contaminated area in the U.S. designated by the Environmental Protection Agency (EPA) for cleanup because it poses a risk to human health or the environment. National Priority List geospatial data were derived from the [EPA's Envirofacts database](https://enviro.epa.gov/).
+An NPL site is a contaminated area in the U.S. designated by the Environmental Protection Agency (EPA) for cleanup because it poses a risk to human health or the environment. National Priority List geospatial data were obtained from the [EPA's Envirofacts database](https://enviro.epa.gov/).
 
-The `npls ` and `ga` datasets are lazy loaded. Once you call `library(hazprox)`, these datasets will be available to you even though they are not displayed in the global environment. For detailed information about these data, including field descriptions, you can search the package documentation: `help('npls')`.
-
-
-## Inspect and Visualize Data 
+The `npls ` and `ga` datasets are LazyLoaded with the hazprox package. When you call `library(hazprox)`, these datasets will be available to you even though they are not displayed in the global environment. The data documentation contains detailed information about these data, including field descriptions. Use the `help()` function to read the data  documentation: `help("npls")`.
 
 ```{r setup, message=FALSE, warning=FALSE}
 library(hazprox)
+library(ggplot2)
 library(dplyr)
 library(sf)
-
-print(c("Census tracts:", nrow(ga)))
-print(c("Superfunds:", nrow(npls)))
 ```
 
-There are 2,791 census tract in the state of Georgia and 17 National Priority List sites. Viewing the first 5 records of the `npls` dataset reveals that these data are simple feature POINTS, projected in the NAD83 UTM zone 19N CRS. 
+## Inspect and visualize data 
+
+There are `r nrow(ga)` census tract in the state of Georgia and `r nrow(npls)` National Priority List sites. Viewing the first 5 records of the `npls` dataset reveals that these data are simple feature POINTS projected in the NAD 1983 Georgia Statewide Lambert coordinate reference system (CRS). The `npls` data include the name of the site and the nearest city. 
 
 ```{r}
-npls |> select(NAME, CITY, geometry) |> slice(1:5)
+npls |> select(NAME, CITY) |> slice(1:5)
 ```
 
-```{r fig1, fig.height=5, fig.width= 7}
-plot(st_geometry(ga), col = "darkgray", border = NA)
-plot(npls$geometry, col = "red", cex = 1, pch = 8, add = TRUE)
-title(main = "National Priority List Sites Located in Georgia")
+
+National Priority List sites are located throughout Georgia, but appear to be clustered together in a few regions. 
+
+```{r, fig1, fig.height=5, fig.width= 7}
+ga |>
+ggplot() +
+  geom_sf(fill = 'gray', color = NA) +
+  geom_sf(data = npls, color = 'black', fill = '#F54439', shape = 23, size = 3, alpha = 0.65) +
+  ggtitle("National Priority List Sites Located in Georgia, 2025") +
+  theme_minimal()
 ```
 
-National Priority List sites are located throughout Georgia, but appear to be tightly clustered together in a few regions. 
-
-
-The Georgia census tracts dataset is a simple feature MULTIPOLYGON and shares the same projected CRS as `npls`. The `avg_proximity` function requires that the input data have the same projected coordinate system. If one layer is not projected, the function will project that layer in the same system as the other input. However, if neither input is projected or if each input has a different projected coordinate system, the function will return an error. 
+The Georgia census tracts dataset is a simple feature MULTIPOLYGON and shares the same projected CRS as `npls`. The `avg_proximity` function requires that the input data have the same projected CRS. The census tract data also includes a field for population size, POP, which we will used to estimate the population-weighted average proximity. However, the census tract data does not contain a county grouping variable, so we will create one for our calculations. 
 
 ```{r}
 ga |>  slice(1:5)
 ```
-The census tract data also includes a field for population size, POP, which we will used to estimate the population-weighted average proximity. However, the census tract data does not contain a county grouping variable, so we will need to create one for our calculations. 
 
 ## Calculate average proximity for counties
 
-The `avg_proximity` function requires users to provide:
+The `avg_proximity()` function accepts several inputs. 
 
-- **from:** a POLYGON or MULTIPOLYGON sf object that you wish to calculate cumulative proximity to the features of interest. Proximity calculations are based sum of the inverse distances between the polygon centroid and features. 
+Required inputs:
+
+- **from:** a POLYGON or MULTIPOLYGON sf object. Proximity is calculated as the sum of inverse distances between each polygon centroid and the features of interest.
 - **to:** an sf object representing the features of interest. These features may be POLYGONS, LINESTRINGS, POINTS, or a combination of geometry types. 
-- **group:** a grouping variable that defines the level statistics are calculated for. All from polygons should be nested within the group. 
+- **group:** a grouping variable that defines the level statistics are calculated for. All from polygons must be nested within a group.
 
-There are also a number of optional arguments that you can provide to `avg_proximity()`:
+Optional inputs:
 
 - **tolerance:** the maximum search distance for features of interest. If provided, only features within the tolerance distance will be considered in proximity calculations. You can specify the units of tolerance using, units = 'x', where x is a common length measurement abbreviation (e.g., 'mi', 'yd', 'm', etc.).
-- **weights:** a numeric vector with the same length as `to` which indicates the weight of each feature. This argument can be used to calibrate proximity calculations for different feature weights. 
-- **pop_weights:** a numeric vector representing the number of individuals living in each from polygon. If provided, `avg_proximity()` will return a population-weighted average value. Omitting an argument for `pop_weights` will return a simple average. 
+- **weights:** a numeric vector with the same length as `to` that indicates the weight to be applied to each feature. 
+- **pop_weights:** a numeric vector representing the population living in each from polygon. If provided, a population-weighted average will be returned. Omitting `pop_weights` will return a simple average. 
 
 To prepare our data for analysis, we will calculate a new field, County, to group tracts into counties. Counties can be identified from the first five characters of the GEOID field. 
 
@@ -89,30 +94,49 @@ To prepare our data for analysis, we will calculate a new field, County, to grou
 ga$County <- substr(ga$GEOID, 1, 5)
 ```
 
-
-For this example, we will consider all National Priority List sites within 15 miles of each census tract boundary. We will also request that the function return a population-weighted average for each county, using the POP field. Results are returned in a new sf object aggregated to the group level. Average proximity is stored in the avg_prox field. 
+For this example, we will consider all NPL sites within 20 miles of each census tract centroid. We will also request that the function return a population-weighted average for each county. Results are returned in a new sf object aggregated to the group level. Average proximity is stored in a column, "avg_prox".  
 
 ```{r}
 gacnty <- avg_proximity(from = ga,
                         to = npls,
-                        tolerance = 15,
+                        tolerance = 20,
                         units = "mi",
                         group = "County",
                         pop_weights = ga$POP)
-
-summary(gacnty$avg_prox)
 ```
 
 ## Map results
 
 ```{r, fig4, fig.height=5, fig.width=8.5, warning=FALSE}
-if (require(ggplot2)) {
-  gacnty |>
+gacnty |>
     ggplot() +
     geom_sf(aes(fill = avg_prox), color = NA) +
     scale_fill_distiller(palette = "Spectral", name = "Proximity") +
     labs(title = "Population-Weighted Average Proximity to Superfund Sites by County",
          subtitle = "Georgia, 2025") +
     theme_minimal()
-}
 ```
+The choropleth map above highlights counties where the population tends to live in closer proximity to NPL sites throughout Georgia. Similar to the point-level map, this map shows apparent clustering in a few regions of the state, with the highest average proximity in Glynn County in the southeast. 
+
+## Comparison of average proximity and number of features within boundary
+
+Importantly, average proximity will not always correlate with the number of features located within an area. If we look at a scatterplot of county average proximity scores and the number of NPL sites within the county, we see a general positive trend between these two values. However, there is considerable variability in average proximity scores among counties with the same number of NPL sites. This variability is the result of `avg_proximity()` taking into account the location of all NPL sites, not just those that fall within the county boundary, and how close the population lives to each NPL site. 
+
+```{r, fig5, fig.height=4, fig.width=6.5}
+sites_per_county <- ga |>
+  mutate(Sites = lengths(st_intersects(ga, npls))) |>
+  st_drop_geometry() |>
+  group_by(County) |>
+  summarise(Sites = sum(Sites))
+
+gacnty |> 
+  left_join(sites_per_county, by = 'County') |>
+  ggplot(aes(x = Sites, y = avg_prox)) +
+  geom_point() + 
+  geom_smooth(method = "lm", color="red", fill="#69b3a2", se=TRUE) +
+  ggtitle("Average Proximity vs. Number of National Priority List Sites within County",
+          subtitle = "Georgia, 2025") +
+  ylab("Average Proximity") +
+  theme_minimal()
+```
+
