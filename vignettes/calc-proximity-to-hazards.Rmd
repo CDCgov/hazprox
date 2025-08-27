@@ -26,14 +26,14 @@ This vignette describes how the `get_proximity()` function can be used to calcul
 
 Cumulative proximity:
 
-- describes how near an area is to all features of interest, with higher values indicating that an area is overall nearer to features than areas with lower proximity values
-- is calculated by summing the inverse distances between the geometric center of each area and all features within a given search distance
-- may be used to describe potential population-level exposure risk to environmental hazards
-- may be weighted based on the importance of each feature
+- Describes how near an area is to all features of interest, with higher values indicating that the area generally closer to features than areas with lower proximity values.
+- Is calculated by summing the inverse distances between the geometric center of each area and all features within a given search distance.
+- Can be used to characterize potential population-level risk of exposure to environmental hazards.
+- Can be weighted to account for the relative importance of each feature.
 
 ## View hazprox datasets
 
-In this example, we will calculate and analyze the cumulative proximity to fires occurring in 2019 for census tracts in the state of Georgia. A simple feature dataset representing all 2020 census tracts in the State of Georgia is LazyLoaded with `hazprox` and can be accessed directly as shown below. The Georgia census tracts, `ga` are provided as a sf MULTIPOLYGON object, allowing us to perform geospatial analysis of these data directly. Viewing the `ga` header reveals that the census tracts are projected in NAD 1983 Georgia Statewide Lambert.
+In this example, we will calculate and analyze the cumulative proximity to fires occurring in 2020 for census tracts in the state of Georgia. A simple feature dataset representing all 2020 census tracts in the State of Georgia is LazyLoaded with `hazprox` and can be accessed directly as shown below. The Georgia census tracts, `ga` are provided as a sf MULTIPOLYGON object, allowing us to perform geospatial analysis of these data directly. Viewing the `ga` header reveals that the census tracts are projected in NAD 1983 Georgia Statewide Lambert.
 
 ```{r setup, message = FALSE, warning=FALSE}
 library(hazprox)
@@ -72,69 +72,79 @@ fires_sf <- st_as_sf(ga_fires, coords = c("Lon", "Lat"), crs = 4269)
 
 ## Prepare data for analysis
 
-For this demonstration, we are only interested in fires occurring during 2019, so we will filter the `fires_sf` dataset based on the `Year` column. 
+For this demonstration, we are only interested in fires occurring during 2020, so we will filter the `fires_sf` dataset based on the `Year` column. 
 
 ```{r}
-fires_sf <- fires_sf |> filter(Year == 2019)
+fires_sf <- fires_sf |> filter(Year == 2020)
 ```
 
-The `fires_sf` dataset contains a column for the total number of acres burned (Acres). We can use this information to weight the fires by severity. First, let's examine the distribution of acres burned. 
+The `fires_sf` dataset contains a column for the total number of acres burned (Acres). We can use this information to weight each fire by severity. First, let's examine the distribution of acres burned. 
 
 ```{r}
 summary(fires_sf$Acres)
 ```
-The number of acres burned shows a highly right-skewed distribution. Most fires burn fewer than seven acres of land; however, the largest fire burned over 400 acres. For this analysis, we will exclude fires less than one acre and create a weight for the number of acres burned. Due to the skewed distribution, we will log-transform acres. 
+The number of acres burned shows a highly right-skewed distribution. Most fires burn fewer than seven acres of land; however, the largest fire burned over 300 acres. For this analysis, we will exclude fires less than one acre and create a weight based on the number of acres burned. Due to the skewed distribution, we will log-transform acres. 
 
 ```{r}
 fires_sf <- fires_sf |>
   filter(Acres >= 1) |>
-  mutate(severity  = log(Acres))
+  mutate(Severity  = log(Acres))
 ```
 
 ## Visualize fires 
 
-Let's take a look at where fires are located throughout Georgia by plotting the fire coordinates on a map of Georgia. We will vary the size and color of each point by the number of acres burned to highlight the most severe fires. 
+Let's take a look at where fires are located throughout Georgia by plotting the fire coordinates on a map of Georgia. We will vary the size and color of each point by the weight we calculated in the previous step to highlight where the most severe fires were located. 
 
 ```{r, fig.dim=c(6, 5)}
 fires_sf |>
-  arrange(severity) |>
+  arrange(Severity) |>
   ggplot() +
-  geom_sf(data = ga, color = NA, fill = "gray") +
-  geom_sf(aes(size = severity, color = severity), alpha = 0.45) +
-  scale_color_distiller(palette = "Spectral", limits = c(0, 7), breaks = seq(0, 7, by = 2), guide = 'legend') +
-  scale_size_continuous(range = c(1, 8)) +
-  labs(title = "Fires (1+ Acres) Occuring in Georgia, 2019") +
+  geom_sf(data = ga, color = NA, fill = "gray40") +
+  geom_sf(aes(size = Severity, color = Severity), alpha = 0.5) +
+  scale_color_distiller(palette = "Spectral", 
+                        limits = c(0, 6), 
+                        breaks = seq(0, 6, by = 2), 
+                        guide = 'legend') +
+  scale_size_continuous(range = c(2, 10), 
+                        limits = c(0, 6), 
+                        breaks = seq(0, 6, by = 2)) +
+  labs(title = "Fires (1+ Acres) Occuring in Georgia, 2020") +
   theme_minimal()
 ```
 
-Fires are well dispersed throughout the state with the exception of the Atlanta metro area. The largest fires appear to be clustered within the southwestern quadrant of the state. 
+Fires are dispersed throughout most the state with the exception of the Atlanta metro area. The largest fires appear to be clustered within the southwestern quadrant of the state. 
 
 ## Calculate proximity 
 
-Next, let's examine how the cumulative proximity is distributed across census tracts in the state using the `get_proximity()` function. We will weight each fire by the log of the total acres burned (Severity). We can also exclude fires occurring more than 20 km from each block group boundary by setting the tolerance to 20. Note, other units of length can be used to specify the tolerance by providing a units argument (e.g., units = 'mi').
+Next, let's examine how the cumulative proximity is distributed across census tracts in the state using the `get_proximity()` function. We will weight each fire by the log of the total acres burned (severity). We can also exclude fires occurring more than 25 km from each block group boundary by setting the tolerance to 25. Note, other units of length can be used to specify the tolerance by providing a units argument (e.g., units = 'mi').
 
-Although we converted our fires data to spatial data with an associated geographic coordinate reference system, these data are not currently projected. Typically we want both our polygon features and our hazards to have the same projected CRS, but let’s see what happens if we neglect to project one of our inputs.  
+Although we previously converted our fires data to spatial data with an associated geographic coordinate reference system, these data are not currently projected. Typically we want both our polygon features and our hazards to have the same projected coordinate reference system (CRS), but let’s see what happens if we neglect to project one of our inputs.  
 
 ```{r}
-wts <- fires_sf$severity
-ga$Proximity <- get_proximity(ga, fires_sf, tolerance = 20, weights = wts)
+wts <- fires_sf$Severity
+ga$Proximity <- get_proximity(ga, fires_sf, tolerance = 25, weights = wts)
 ```
 
-When we use the `get_proximity function`, we get the following warning message:
+When we apply `get_proximity()` to the unprojected fire locations, we get the following warning message:
 
-```to is not in a projected CRS.
+```
+to is not in a projected CRS.
 
-Projecting to into (+proj=utm +zone=19 +ellps=GRS80 +units=m +no_defs).```
+Projecting to into (+proj=lcc +lat_0=0 +lon_0=-83.5 +lat_1=31.4166666666667 +lat_2=34.2833333333333 +x_0=0 +y_0=0 +datum=NAD83 +units=us-ft +no_defs).
+```
 
-This message warns us that our fires_sf are not projected. The `get_proximity` function has done us the favor of projecting the `fires_sf` into the same CRS as the `ga` layer. Note, this message does not indicate an error. The function will still work when one of the input datasets is not projected because it assumes that the unprojected dataset should have the same projections as the other input. However, if neither input has a projected CRS or if they have different CRS, `get_proximity` will return an error. 
+This message informs us that because fires_sf lacks a projection, the `get_proximity` function has projected it for us using the same CRS as the from layer (`ga`). Note, this message does not indicate an error. The function will succeed when only one of the input datasets is not projected because it assumes that the unprojected data should have the same CRS as the other input. However, if neither input has a projected CRS or if they have different CRS, `get_proximity` will return an error. 
 
 ## Descriptive statistics
 
-Now let's build a histogram of the new Proximity field to examine the distribution. 
+Now let's examine the distribution of the proximity value by requesting a histogram. 
 
-```{r, fig.dim = c(4, 3)}
+```{r, fig.dim = c(5, 3)}
 ggplot(ga, aes(Proximity)) +
-  geom_histogram(fill = "navy", color = "white")
+  geom_histogram(fill = "navy", color = "white") +
+  ggtitle('Distribution of Census Tract Proximity to 2020 Fires')+
+  ylab('Census Tracts (n)') +
+  theme_minimal()
 ```
 
 Most tracts have relatively low proximity. The median score is `r round(median(ga$Proximity), 3)` However, a few tracts have very high proximity scores. 
@@ -149,8 +159,8 @@ ga |>
   geom_sf(color = NA) +
   scale_fill_distiller(palette = "Spectral") +
   labs(title = "Census Tract Proximity to Fires Burning 1+ Acre",
-       subtitle = "Georgia, 2019") +
+       subtitle = "Georgia, 2020") +
   theme_minimal()
 ```
 
-This concludes the `get_proximity` vignette; however, users may consider additional applications of cumulative proximity statistics to public health issues. For example, the proximity score may be used to identify communities or facilities with higher exposure to fire smoke for health education and outreach or may be used to model correlations with health outcomes such as asthma.  
+The choropleth map above highlights census tracts with greater overall proximity to fires burning more than one acre in 2020. This map appears to agree with the overall trend displayed in the point-level map, but provides more visual clarity and reveals tracts outside the southwest quadrant with high proximity. This concludes the `get_proximity` vignette; however, users may consider additional applications of cumulative proximity statistics to public health issues. For example, proximity scores can be used to identify communities or facilities with the most potential for exposure to various environmental health risks. Proximity scores can be used to target health education and outreach or used to model relationships between population-level exposure burden and health outcomes.  
