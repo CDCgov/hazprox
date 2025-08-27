@@ -26,19 +26,20 @@
   data.frame(unit = "ft", std = 100 / 2.54 / 12),
   data.frame(unit = "foot", std = 100 / 2.54 / 12),
   data.frame(unit = "feet", std = 100 / 2.54 / 12),
+  data.frame(unit = "us survey foot", std = 3937 / 1200),
+  data.frame(unit = "us survey feet", std = 3937 / 1200),
   data.frame(unit = "yd", std = 100 / 2.54 / 36),
   data.frame(unit = "yard", std = 100 / 2.54 / 36),
   data.frame(unit = "fathom", std = 100 / 2.54 / 72),
   data.frame(unit = "mi", std = 100 / 2.54 / 12 / 5280),
   data.frame(unit = "mile", std = 100 / 2.54 / 12 / 5280),
-  data.frame(unit = "naut_mi", std = 1 / 1852),
+  data.frame(unit = "naut mi", std = 1 / 1852),
   data.frame(unit = "nautical mile", std = 1 / 1852),
   data.frame(unit = "nautical mi", std = 1 / 1852),
   data.frame(unit = "au", std = 1 / 149597870700),
   data.frame(unit = "AU", std = 1 / 149597870700),
   data.frame(unit = "light year", std = 1 / 9460730472580800),
-  data.frame(unit = "light_yr", std = 1 / 9460730472580800),
-  data.frame(unit = "light_year", std = 1 / 9460730472580800),
+  data.frame(unit = "light yr", std = 1 / 9460730472580800),
   data.frame(unit = "parsec", std = 1 / 149597870700 / (6.48e5 / pi)),
   data.frame(unit = "point", std = 100 / 2.54 * 72)
 )
@@ -48,7 +49,7 @@ to_km <- function(x, from) {
     x <- units::drop_units(x)
   }
   unit <- std <- NULL
-  from <- tolower(from)
+  from <- tolower(gsub("[^[:alnum:]]", " ", from))
   if (nrow(subset(.conversions, unit == from)) == 0) stop("the \'from\' argument is not an acceptable unit.")
   value <- (x / subset(.conversions, unit == from, std, drop = TRUE)) * 0.001
   value
