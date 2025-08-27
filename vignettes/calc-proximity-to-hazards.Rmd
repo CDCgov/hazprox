@@ -1,5 +1,5 @@
 ---
-title: "Calculate cumulative proximity for geographic areas"
+title: "Vignette 1: Calculate Cumulative Proximity for Geographic Areas"
 author: "Sarah Rockhill"
 output:
   html_document:
@@ -21,6 +21,8 @@ knitr::opts_chunk$set(
   rmarkdown.html_vignette.check_title = FALSE
 )
 ```
+
+## Introduction
 
 This vignette describes how the `get_proximity()` function can be used to calculate cumulative proximity to select features for a geographic area, such as a county, census tract, or neighborhood. The `get_proximity()` function returns a vector of numeric values representing cumulative proximity, or how close a community is to the features of interest. 
 
