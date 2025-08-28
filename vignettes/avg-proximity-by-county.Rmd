@@ -55,7 +55,7 @@ npls |> select(NAME, CITY) |> slice(1:5)
 ```
 
 
-National Priority List sites are located throughout Georgia, but appear to be clustered together in a few regions. 
+National Priority List sites are located throughout Georgia but appear to be clustered together in a few regions. 
 
 ```{r, fig1, fig.height=5, fig.width= 7}
 ga |>
@@ -107,7 +107,7 @@ gacnty <- avg_proximity(from = ga,
 
 ## Map results
 
-```{r, fig4, fig.height=5, fig.width=8.5, warning=FALSE}
+```{r, fig2, fig.height=5, fig.width=7, warning=FALSE}
 gacnty |>
     ggplot() +
     geom_sf(aes(fill = avg_prox), color = NA) +
@@ -122,7 +122,7 @@ The choropleth map above highlights counties where the population tends to live 
 
 Importantly, average proximity will not always correlate with the number of features located within an area. If we look at a scatterplot of county average proximity scores and the number of NPL sites within the county, we see a general positive trend between these two values. However, there is considerable variability in average proximity scores among counties with the same number of NPL sites. This variability is the result of `avg_proximity()` taking into account the location of all NPL sites, not just those that fall within the county boundary, and how close the population lives to each NPL site. 
 
-```{r, fig5, fig.height=4, fig.width=6.5}
+```{r, fig3, fig.height=4, fig.width=7}
 sites_per_county <- ga |>
   mutate(Sites = lengths(st_intersects(ga, npls))) |>
   st_drop_geometry() |>
