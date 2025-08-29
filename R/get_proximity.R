@@ -12,7 +12,7 @@
 #' @param weights An optional numeric vector with the same length as `to` that applies a weight to each `to` feature.
 #'
 #' @details
-#' get_proximity calculates proximity statistics for each polygon in  `from` based on the cumulative inverse distance
+#' get_proximity calculates proximity statistics for each polygon in `from` based on the cumulative inverse distance
 #' between the geometric center of `from` and each feature in `to`, typically representing environmental hazard(s)
 #' of interest or concern. If a tolerance value is provided, only hazards within the tolerance distance will be included
 #' in proximity calculations. For polygons that do not have any hazards within the specified tolerance, proximity will only
@@ -21,7 +21,7 @@
 #' Users may also weight the proximity calculations based on the expected risk or severity of each hazard in `to` by
 #' providing a vector of weights corresponding to each hazard.
 #'
-#' In cases where there is no distance between a polygon centroid in `from` and one or more `to` features, proximity
+#' In cases where there is zero distance between a polygon centroid in `from` and one or more `to` features, proximity
 #' calculations are smoothed by adding a constant (epsilon) equal to one-tenth of the minimum non-zero distance to
 #' all distances.
 #'
