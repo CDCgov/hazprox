@@ -3,7 +3,7 @@ Thank you for contributing to GRASP's Open Source projects! If you have any
 questions or doubts, please send them our way. We appreciate all contributions, 
 and we are looking forward to fostering an open, transparent, and collaborative environment.
 
-Before contributing, we encourage you to also read our [LICENSE](LICENSE) and
+Before contributing, we encourage you to read our [LICENSE](LICENSE) and
 [README](README.md) files, also found in this repository. If you have any questions not
 answered by the content of this repository, feel free to [contact us](mailto:srockhill@cdc.gov).
 

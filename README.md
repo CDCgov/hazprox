@@ -25,7 +25,7 @@ endorsement of any one particular service, product, or enterprise.*
 
 ## Overview
 
-An R package for calculating cumulative, area-based proximity for simple feature objects. 
+hazprox includes tools for calculating cumulative, area-based proximity for simple feature objects. 
 The hazprox package can be used to quantify how close a geographic area is to other features of 
 interest and is intended to support exploratory analysis of environmental hazards. 
 This tool is based on the Superfund Proximity measurement described in the 
