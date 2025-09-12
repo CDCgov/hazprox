@@ -28,7 +28,7 @@ This vignette describes how the `get_proximity()` function can be used to calcul
 
 Cumulative proximity:
 
-- Describes how near an area is to all features of interest, with higher values indicating that the area generally closer to features than areas with lower proximity values.
+- Describes how near an area is to all features of interest, with higher values indicating that the area is generally closer to features than areas with lower proximity values.
 - Is calculated by summing the inverse distances between the geometric center of each area and all features within a given search distance.
 - Can be used to characterize potential population-level risk of exposure to environmental hazards.
 - Can be weighted to account for the relative importance of each feature.
@@ -135,7 +135,7 @@ to is not in a projected CRS.
 Projecting to into (+proj=lcc +lat_0=0 +lon_0=-83.5 +lat_1=31.4166666666667 +lat_2=34.2833333333333 +x_0=0 +y_0=0 +datum=NAD83 +units=us-ft +no_defs).
 ```
 
-This message informs us that because fires_sf lacks a projection, the `get_proximity` function has projected it for us using the same CRS as the from layer (`ga`). Note, this message does not indicate an error. The function will succeed when only one of the input datasets is not projected because it assumes that the unprojected data should have the same CRS as the other input. However, if neither input has a projected CRS or if they have different CRS, `get_proximity` will return an error. 
+This message informs us that because fires_sf lacks a projection, the `get_proximity` function has projected it for us using the same CRS as the from layer (`ga`). Note, this message does not indicate an error. The function will succeed when only one of the input datasets is not projected because it assumes that the unprojected data should have the same CRS as the other input. However, if neither input has a projected CRS or if they have a different CRS, `get_proximity` will return an error. 
 
 ## Descriptive statistics
 

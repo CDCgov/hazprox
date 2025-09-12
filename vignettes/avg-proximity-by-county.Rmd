@@ -66,7 +66,7 @@ ggplot() +
   theme_minimal()
 ```
 
-The Georgia census tracts dataset is a simple feature MULTIPOLYGON and shares the same projected CRS as `npls`. The `avg_proximity` function requires that the input data have the same projected CRS. The census tract data also includes a field for population size, POP, which we will used to estimate the population-weighted average proximity. However, the census tract data does not contain a county grouping variable, so we will create one for our calculations. 
+The Georgia census tracts dataset is a simple feature MULTIPOLYGON and shares the same projected CRS as `npls`. The `avg_proximity` function requires that the input data have the same projected CRS. The census tract data also includes a field for population size, POP, which we will use to estimate the population-weighted average proximity. However, the census tract data does not contain a county grouping variable, so we will create one for our calculations. 
 
 ```{r}
 ga |>  slice(1:5)
@@ -116,11 +116,12 @@ gacnty |>
          subtitle = "Georgia, 2025") +
     theme_minimal()
 ```
+
 The choropleth map above highlights counties where the population tends to live in closer proximity to NPL sites throughout Georgia. Similar to the point-level map, this map shows apparent clustering in a few regions of the state, with the highest average proximity in Glynn County in the southeast. 
 
 ## Comparison of average proximity and number of features within boundary
 
-Importantly, average proximity will not always correlate with the number of features located within an area. If we look at a scatterplot of county average proximity scores and the number of NPL sites within the county, we see a general positive trend between these two values. However, there is considerable variability in average proximity scores among counties with the same number of NPL sites. This variability is the result of `avg_proximity()` taking into account the location of all NPL sites, not just those that fall within the county boundary, and how close the population lives to each NPL site. 
+Importantly, average proximity will not always correlate with the number of features located within an area. If we look at a scatterplot of county average proximity scores and the number of NPL sites within the county, we see a positive trend between these two values. However, there is considerable variability in average proximity scores among counties with the same number of NPL sites. This variability is the result of `avg_proximity()` taking into account the location of all NPL sites, not just those that fall within the county boundary, and how close the population lives to each NPL site. 
 
 ```{r, fig3, fig.height=4, fig.width=7}
 sites_per_county <- ga |>
