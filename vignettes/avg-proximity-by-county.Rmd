@@ -33,9 +33,9 @@ In this vignette, we will find the population-weighted average proximity to envi
 All functions in the `hazprox` are designed to work with simple features (sf) objects. This example demonstrates a typical workflow using two sf datasets bundled with the `hazprox` package:
 
 - `ga`: 2020 census tract boundaries in the state of Georgia
-- `npls`: National Priority List (NPL) locations, otherwise known as Superfund sites, within the state of Georgia. 
+- `npls`: National Priority List (NPL) locations, otherwise known as Superfund sites, within the state of Georgia 
 
-An NPL site is a contaminated area in the U.S. designated by the Environmental Protection Agency (EPA) for cleanup because it poses a risk to human health or the environment. National Priority List geospatial data were obtained from the [EPA's Envirofacts database](https://enviro.epa.gov/).
+An NPL site is a contaminated area in the United States designated by the Environmental Protection Agency (EPA) for cleanup because it poses a risk to human health or the environment. National Priority List geospatial data were obtained from the [EPA's Envirofacts database](https://enviro.epa.gov/).
 
 The `npls ` and `ga` datasets are LazyLoaded with the hazprox package. When you call `library(hazprox)`, these datasets will be available to you even though they are not displayed in the global environment. The data documentation contains detailed information about these data, including field descriptions. Use the `help()` function to read the data  documentation: `help("npls")`.
 
@@ -48,14 +48,14 @@ library(sf)
 
 ## Inspect and visualize data 
 
-There are `r nrow(ga)` census tract in the state of Georgia and `r nrow(npls)` National Priority List sites. Viewing the first 5 records of the `npls` dataset reveals that these data are simple feature POINTS projected in the NAD 1983 Georgia Statewide Lambert coordinate reference system (CRS). The `npls` data include the name of the site and the nearest city. 
+The state of Georgia has `r nrow(ga)` census tracts and `r nrow(npls)` NPL sites. Viewing the first 5 records of the `npls` dataset reveals that these data are simple feature POINTS projected in the NAD 1983 Georgia Statewide Lambert coordinate reference system (CRS). The `npls` data include the name of the site and the nearest city. 
 
 ```{r}
 npls |> select(NAME, CITY) |> slice(1:5)
 ```
 
 
-National Priority List sites are located throughout Georgia but appear to be clustered together in a few regions. 
+NPL sites are located throughout Georgia but appear to be clustered together in a few regions. 
 
 ```{r, fig1, fig.height=5, fig.width= 7}
 ga |>

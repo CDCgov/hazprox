@@ -10,7 +10,7 @@
 A data frame with 17 rows and 13 columns:
 \describe{
 \item{NAME}{Name of Superfund site}
-\item{EPA_ID}{A unique 12 digit identification number assigned by the Superfund Enterprise Management System}
+\item{EPA_ID}{A unique 12-digit identification number assigned by the Superfund Enterprise Management System}
 \item{SITE_ID}{Unique identifier for site for Superfunds with multiple sites}
 \item{STREET}{Street address of Superfund location}
 \item{ADDR_C}{Additional address information for Superfund location, if any}

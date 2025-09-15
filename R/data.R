@@ -11,7 +11,7 @@
 #' A spatial data frame with 2,791 rows and 5 columns:
 #' \describe{
 #'   \item{STATE}{State abbreviation}
-#'   \item{GEOID}{11 digit unique identifier of the tract}
+#'   \item{GEOID}{11-digit unique identifier of the tract}
 #'   \item{LSAD}{Year}
 #'   \item{POP}{Estimate of total population}
 #'   \item{geometry}{geometry}
@@ -37,7 +37,7 @@
 #' A data frame with 17 rows and 13 columns:
 #' \describe{
 #'   \item{NAME}{Name of Superfund site}
-#'   \item{EPA_ID}{A unique 12 digit identification number assigned by the Superfund Enterprise Management System}
+#'   \item{EPA_ID}{A unique 12-digit identification number assigned by the Superfund Enterprise Management System}
 #'   \item{SITE_ID}{Unique identifier for site for Superfunds with multiple sites}
 #'   \item{STREET}{Street address of Superfund location}
 #'   \item{ADDR_C}{Additional address information for Superfund location, if any}

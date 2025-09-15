@@ -10,7 +10,7 @@
 A spatial data frame with 2,791 rows and 5 columns:
 \describe{
 \item{STATE}{State abbreviation}
-\item{GEOID}{11 digit unique identifier of the tract}
+\item{GEOID}{11-digit unique identifier of the tract}
 \item{LSAD}{Year}
 \item{POP}{Estimate of total population}
 \item{geometry}{geometry}
