@@ -21,9 +21,9 @@
 #' Users may also weight the proximity calculations based on the expected risk or severity of each hazard in `to` by
 #' providing a vector of weights corresponding to each hazard.
 #'
-#' In cases where there is zero distance between a polygon centroid in `from` and one or more `to` features, proximity
-#' calculations are smoothed by adding a constant (epsilon) equal to one-tenth of the minimum non-zero distance to
-#' all distances.
+#' In cases where the distance between the polygon centroid in `from` and a `to` feature is less than the block area
+#' equivalent radius, distance is calculated as 90% of the block area equivalent radius. This adjustment reduces the
+#' influence of features that happen to be located near the polygon centroid.
 #'
 #' @returns
 #' A numeric vector with the same length as `from`.
@@ -90,15 +90,6 @@ get_proximity <- function(from, to, tolerance = NULL, units = "km", weights = NU
   distance_units <- units(distances)$numerator
   distances <- to_km(distances, from = distance_units)
 
-  #calculate epsilon value for zero distance adjustment
-  if (any(distances <= 0)) {
-    epsilon <- min(distances[distances > 0]) / 10
-  } else {
-    epsilon = 0
-  }
-
-  distances <- distances + epsilon
-
   # Prepare results list
   result_list <- vector("numeric", length = nrow(from))
 
@@ -113,7 +104,7 @@ get_proximity <- function(from, to, tolerance = NULL, units = "km", weights = NU
       result_list[i] <- (1 / dists[min_idx]) * weights[min_idx]
     } else {
       # Calculate distances only to nearby points
-      corrected <- ifelse(dists[within_tol] < from$baeqRad[i], dists[within_tol] * 0.9, dists[within_tol])
+      corrected <- ifelse(dists[within_tol] < from$baeqRad[i], from$baeqRad[i] * 0.9, dists[within_tol])
       wts <- weights[within_tol]
       result_list[i] <- sum((1 / corrected) * wts)
     }

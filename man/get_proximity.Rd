@@ -35,9 +35,9 @@ consider the single nearest distance.
 Users may also weight the proximity calculations based on the expected risk or severity of each hazard in \code{to} by
 providing a vector of weights corresponding to each hazard.
 
-In cases where there is zero distance between a polygon centroid in \code{from} and one or more \code{to} features, proximity
-calculations are smoothed by adding a constant (epsilon) equal to one-tenth of the minimum non-zero distance to
-all distances.
+In cases where the distance between the polygon centroid in \code{from} and a \code{to} feature is less than the block area
+equivalent radius, distance is calculated as 90\% of the block area equivalent radius. This adjustment reduces the
+influence of features that happen to be located near the polygon centroid.
 }
 \examples{
 set.seed(123)
