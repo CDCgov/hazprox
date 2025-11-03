@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="069_GRASP_Logo_Color.png"/>
+  <img src="man/figures/069_GRASP_Logo_Color.png"/>
 </p>
 
 **Welcome to the Geospatial Research, Analysis, and Services Program (GRASP) Place & Health Code Hub!**
