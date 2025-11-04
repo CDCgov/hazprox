@@ -1,4 +1,25 @@
 url: https://cdcgov.github.io/hazprox/
 template:
   bootstrap: 5
-
+navbar:
+  components:
+    articles:
+      text: Articles
+      menu:
+        - text: Calculate proximity
+          href: articles/calc-proximity-to-hazards.html.html
+        - text: Find average proximity for counties
+          href: articles/avg-proximity-by-county.html
+reference:
+- title: Functions
+  contents:
+  - avg_proximity
+  - get_proximity
+  - sync_projection
+- title: Datasets
+  desc: >
+    hazprox includes several example datasets to demonstrate function parameters and outputs.
+  contents:
+  - ga
+  - ga_fires
+  - npls
