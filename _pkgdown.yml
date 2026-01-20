@@ -7,7 +7,7 @@ navbar:
       text: Articles
       menu:
         - text: Calculate proximity
-          href: articles/calc-proximity-to-hazards.html.html
+          href: articles/calc-proximity-to-hazards.html
         - text: Find average proximity for counties
           href: articles/avg-proximity-by-county.html
 reference:
